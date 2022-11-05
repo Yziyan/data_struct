@@ -54,6 +54,18 @@ public class BinaryTreeImpl<E> implements BinaryTree<E> {
         public boolean hasTowChildren() {
             return left != null && right != null;
         }
+
+        /**
+         * 查看节点是否位于父节点的左子树
+         */
+        public boolean isLeftChild() { return parent != null && this == parent.left; }
+
+        /**
+         * 查看节点是否位于父节点的右子树
+         */
+        public boolean isRightChild() {
+            return parent != null && this == parent.right;
+        }
     }
 
     public BinaryTreeImpl() { }

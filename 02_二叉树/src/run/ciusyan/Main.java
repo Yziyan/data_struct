@@ -1,5 +1,6 @@
 package run.ciusyan;
 
+import run.ciusyan.avltree.AVLTree;
 import run.ciusyan.binarysearchtree.BinarySearchTree;
 import run.ciusyan.binarysearchtree.impl.BSTImpl;
 import run.ciusyan.entity.Person;
@@ -8,11 +9,6 @@ import run.ciusyan.printer.BinaryTrees;
 import java.util.Comparator;
 
 public class Main {
-
-    public static void main(String[] args) {
-        test4();
-    }
-
 
     static void test() {
         Integer[] elements = new Integer[]{
@@ -116,4 +112,26 @@ public class Main {
         BinaryTrees.println(bst);
 
     }
+
+    static void test5() {
+        Integer[] elements = new Integer[]{
+            39, 83, 64, 1, 53, 65, 88, 57, 10, 82, 86, 61, 93, 8, 72, 35, 21, 84, 5, 100
+        };
+        BinarySearchTree<Integer> AVLTree = new AVLTree<>();
+        for (Integer element : elements) {
+            AVLTree.add(element);
+        }
+
+        BinaryTrees.println(AVLTree);
+        AVLTree.remove(1);
+        AVLTree.remove(5);
+        AVLTree.remove(84);
+        AVLTree.remove(86);
+        BinaryTrees.println(AVLTree);
+    }
+
+    public static void main(String[] args) {
+        test5();
+    }
+
 }

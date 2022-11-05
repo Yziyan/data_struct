@@ -28,8 +28,11 @@ public class BSTImpl<E> extends BinaryTreeImpl<E> implements BinarySearchTree<E>
     public void add(E element) {
         elementNotNullCheck(element);
         if (root == null) { // 添加根节点
-            root = new Node<>(element, null);
+            root = createNode(element, null);
             size++;
+
+            // 添加后执行的逻辑
+            afterAdd(root);
             return;
         }
         // 来到这说明不是第一次添加
@@ -57,16 +60,40 @@ public class BSTImpl<E> extends BinaryTreeImpl<E> implements BinarySearchTree<E>
         }
 
         // 构建待添加的节点
-        Node<E> newNode = new Node<>(element, parent);
+        Node<E> newNode = createNode(element, parent);
         // 拿到刚刚的比较结果，决定最后要添加到父节点的左侧还是右侧【相等的情况在上面已经处理过了】
         if (compare > 0) {
             parent.right = newNode;
         } else {
             parent.left = newNode;
         }
-
         size++;
+
+        // 添加后执行的逻辑
+        afterAdd(newNode);
     }
+
+    /**
+     * 提供模板的角色给子类实现【添加之后的处理】
+     * @param node：添加完成的节点
+     */
+    protected void afterAdd(Node<E> node) { }
+
+    /**
+     * 提供模板的角色给子类实现
+     * @param element：节点的元素
+     * @param parent：节点的父节点
+     * @return ：构建好的节点对象
+     */
+    protected Node<E> createNode(E element, Node<E> parent) {
+        return new Node<>(element, parent);
+    }
+
+    /**
+     * 提供模板的角色给子类实现【删除之后的处理】
+     * @param node：被删除的节点
+     */
+    protected void afterRemove(Node<E> node) { }
 
     @Override
     public void remove(E element) {
@@ -97,8 +124,14 @@ public class BSTImpl<E> extends BinaryTreeImpl<E> implements BinarySearchTree<E>
             } else { // node == node.parent.right
                 node.parent.right = child;
             }
+
+            // 删除之后的处理
+            afterRemove(node);
         } else if (node.parent == null) { // 度为 0 的节点 —— 情况 ① 只有一个根节点的情况
             root = null;
+
+            // 删除之后的处理
+            afterRemove(node);
         } else { // 度为 0 的节点 —— 情况 ①
             // 看看待删除的叶子节点在它父节点的哪一边，在哪一边就删除谁
             if (node == node.parent.left) {
@@ -106,6 +139,9 @@ public class BSTImpl<E> extends BinaryTreeImpl<E> implements BinarySearchTree<E>
             } else { // node == node.parent.right
                 node.parent.right = null;
             }
+
+            // 删除之后的处理
+            afterRemove(node);
         }
     }
 
