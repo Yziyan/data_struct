@@ -66,6 +66,16 @@ public class BinaryTreeImpl<E> implements BinaryTree<E> {
         public boolean isRightChild() {
             return parent != null && this == parent.right;
         }
+
+        /**
+         * 获取兄弟节点
+         * @return ：兄弟节点
+         */
+        public Node<E> sibling() {
+            if (isLeftChild()) return parent.right; // 自己在左边，返回右边
+            if (isRightChild()) return parent.left; // 自己在右边，返回左边
+            return null; // 没有父节点，那么也没有兄弟节点
+        }
     }
 
     public BinaryTreeImpl() { }
