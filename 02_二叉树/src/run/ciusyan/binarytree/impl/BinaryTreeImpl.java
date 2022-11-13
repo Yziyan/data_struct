@@ -76,6 +76,14 @@ public class BinaryTreeImpl<E> implements BinaryTree<E> {
             if (isRightChild()) return parent.left; // 自己在右边，返回左边
             return null; // 没有父节点，那么也没有兄弟节点
         }
+
+        @Override
+        public String toString() {
+            if (parent == null) {
+                return element + "_p(null)";
+            }
+            return element + "_p(" + parent.element + ")";
+        }
     }
 
     public BinaryTreeImpl() { }
@@ -379,11 +387,7 @@ public class BinaryTreeImpl<E> implements BinaryTree<E> {
 
     @Override
     public Object string(Object node) {
-        Node<E> myNode = (Node<E>) node;
-        if (myNode.parent == null) {
-            return myNode.element + "_p(null)";
-        }
-        return myNode.element + "_p(" + myNode.parent.element + ")";
+        return node;
     }
 
 }

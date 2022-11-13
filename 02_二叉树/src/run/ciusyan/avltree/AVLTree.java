@@ -1,13 +1,13 @@
 package run.ciusyan.avltree;
 
-import run.ciusyan.binarysearchtree.impl.BSTImpl;
+import run.ciusyan.balancebinarysearchtree.BBST;
 
 import java.util.Comparator;
 
 /**
  * 自平衡二叉搜索树 —— AVL树
  */
-public class AVLTree<E> extends BSTImpl<E> {
+public class AVLTree<E> extends BBST<E> {
 
     public AVLTree() {
         this(null);
@@ -127,107 +127,19 @@ public class AVLTree<E> extends BSTImpl<E> {
 
     }
 
-    /**
-     * 统一旋转逻辑
-     */
-    private void rotate(Node<E> R, // 待旋转节点的根节点
-                        Node<E> A, Node<E> B, Node<E> C, // 左子树
-                        Node<E> D, // 最终的根节点
-                        Node<E> E, Node<E> F, Node<E> G // 右子树的
-    ) {
+    @Override
+    protected void rotate(Node<E> R, Node<E> A, Node<E> B, Node<E> C, Node<E> D, Node<E> E, Node<E> F, Node<E> G) {
+        super.rotate(R, A, B, C, D, E, F, G);
 
-        // 将 D 变成根节点
-        D.parent = R.parent;
-        if (R.isRightChild()) { // 待旋转节点在根节点的右边
-            R.parent.right = D;
-        } else if (R.isLeftChild()) { // 待旋转节点在根节点的左边
-            R.parent.left = D;
-        } else { // 待旋转节点就是根节点
-            root = D;
-        }
-
-        // 构建 D 的左子树
-        B.left = A;
-        B.right = C;
-        if (A != null) {
-            A.parent = B;
-        }
-        if (C != null) {
-            C.parent = null;
-        }
-        B.parent = D;
+        // 更新树的高度【也要先更新矮的】
         updateHeight(B); // 更新左子树B 的高度
-
-        // 构建 D 的右子树
-        F.left = E;
-        F.right = G;
-        if (E != null) {
-            E.parent = F;
-        }
-        if (G != null) {
-            G.parent = F;
-        }
-        F.parent = D;
         updateHeight(F); // 更新右子树F 的高度
-
-        // 将 B - D - F 连接起来
-        D.left = B;
-        D.right = F;
         updateHeight(D); // 更新 D 的高度
     }
 
-    /**
-     * 左旋转
-     * @param node：待旋转节点
-     */
-    private void rotateLeft(Node<E> node) {
-        Node<E> child = node.right; // 取出子节点 【左旋，节点肯定在右边】
-        Node<E> grandChild = child.left; // 取出孙子节点
-        node.right = grandChild; // 将上面的节点往下旋转【将待旋转的子节点指向它的孙子节点】
-        child.left = node; // 将下面的节点向上旋转【将子节点的子节点变成待旋转节点】
-
-        // 旋转后的操作
-        afterRotate(node, child, grandChild);
-    }
-
-    /**
-     * 右旋转
-     * @param node：待旋转节点
-     */
-    private void rotateRight(Node<E> node) {
-        Node<E> child = node.left; // 取出子节点【右旋：节点肯定在左边】
-        Node<E> grandChild = child.right; // 取出孙子节点
-        node.left = grandChild; // 将上面的节点往下旋转【将待旋转的子节点指向它的孙子节点】
-        child.right = node; // 将下面的节点向上旋转【将子节点的子节点变成待旋转节点】
-
-        // 旋转后的操作
-        afterRotate(node, child, grandChild);
-    }
-
-    /**
-     * 旋转后所需要维护的内容
-     * @param node：原先的待旋转节点
-     * @param child：子节点
-     * @param grandChild：孙子节点
-     */
-    private void afterRotate(Node<E> node, Node<E> child, Node<E> grandChild) {
-        // 更新子节点的父节点
-        child.parent = node.parent;
-        if (node.isLeftChild()) { // 待旋转节点是它父节点的左子树
-            node.parent.left = child;
-        } else if (node.isRightChild()) { // 待旋转节点是它父节点的右子树
-            node.parent.right = child;
-        } else { // 没有父节点【待旋转节点就是根节点】
-            root = child;
-        }
-
-        // 更新孙子节点的父节点
-        if (grandChild != null) {
-            grandChild.parent = node;
-        }
-
-        // 更新原先待旋转节点的父节点
-        node.parent = child;
+    @Override
+    protected void afterRotate(Node<E> node, Node<E> child, Node<E> grandChild) {
+        super.afterRotate(node, child, grandChild);
 
         // 更新节点的高度 【先更新矮的、后更新高的】
         updateHeight(node);
@@ -275,6 +187,14 @@ public class AVLTree<E> extends BSTImpl<E> {
             if (LH < RH) return right; // 右边较高，返回右子树
             // 左右高度一样，返回与父节点同方向的节点
             return isLeftChild() ? left : right;
+        }
+
+        @Override
+        public String toString() {
+            if (parent == null) {
+                return element + "_p(null)_h(" + height + ")";
+            }
+            return element + "_p(" + parent.element + ")_h(" + height + ")";
         }
     }
 

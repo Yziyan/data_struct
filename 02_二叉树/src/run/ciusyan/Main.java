@@ -5,6 +5,7 @@ import run.ciusyan.binarysearchtree.BinarySearchTree;
 import run.ciusyan.binarysearchtree.impl.BSTImpl;
 import run.ciusyan.entity.Person;
 import run.ciusyan.printer.BinaryTrees;
+import run.ciusyan.redblacktree.RBTree;
 
 import java.util.Comparator;
 
@@ -123,11 +124,28 @@ public class Main {
         }
 
         BinaryTrees.println(AVLTree);
-        AVLTree.remove(1);
-        AVLTree.remove(5);
-        AVLTree.remove(84);
-        AVLTree.remove(86);
-        BinaryTrees.println(AVLTree);
+        for (int i = 0; i < elements.length; i++) {
+
+            AVLTree.remove(elements[i]);
+
+            System.out.println("【" + elements[i] + "】");
+            BinaryTrees.println(AVLTree);
+
+            System.out.println("----------------");
+        }
+    }
+
+    static void test6() {
+        Integer[] elements = new Integer[]{
+            83, 14, 84, 81, 55, 100, 90, 31, 79, 15, 85, 1, 2, 40, 46, 36, 62
+        };
+        BinarySearchTree<Integer> rbTree = new RBTree<>();
+        for (Integer element : elements) {
+            System.out.println("【"+ element +"】");
+            rbTree.add(element);
+            BinaryTrees.println(rbTree);
+        }
+
     }
 
     public static void main(String[] args) {
