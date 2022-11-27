@@ -4,6 +4,7 @@ import run.ciusyan.binarytree.BinaryTree;
 
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Stack;
 
 /**
  * 二叉树
@@ -151,10 +152,60 @@ public class BinaryTreeImpl<E> implements BinaryTree<E> {
     }
 
     /**
-     * 前序遍历
+     * 前序遍历 - 非递归版1
      */
     @Override
     public void preorder(Visitor<E> visitor) {
+        if (visitor == null || root == null) return;
+
+        // 准备一个栈，并且将根节点放入其中
+        Stack<Node<E>> stack = new Stack<>();
+        stack.push(root);
+
+        while (!stack.isEmpty()) {
+            final Node<E> node = stack.pop(); // 弹出栈顶元素
+            if (visitor.visit(node.element)) return; // 访问元素，若外界需要停止，直接返回即可
+
+            if (node.right != null) { // 如果右子节点不为空，将其入栈
+                stack.push(node.right);
+            }
+
+            if (node.left != null) { // 如果左子节点不为空，将其入栈
+                stack.push(node.left);
+            }
+        }
+    }
+
+    /**
+     * 前序遍历 - 非递归版2
+     */
+    public void preorder1(Visitor<E> visitor) {
+        if (visitor == null || root == null) return;
+
+        Node<E> node = root;
+        Stack<Node<E>> stack = new Stack<>(); // 准备一个栈
+
+        while (true) {
+            if (node != null) { // 如果 node 没有到最左边
+
+                if (visitor.visit(node.element)) return; // 访问元素，若外界需要停止，直接返回即可
+
+                if (node.right != null) { // 右子节点不为空，将其入栈
+                    stack.push(node.right);
+                }
+
+                node = node.left; // 再向左走
+            } else { // 处理右边
+                if (stack.isEmpty()) return; // 如果 node 和 栈 都为空了，就直接返回
+                node = stack.pop(); // 将栈顶元素弹出来，让 node 再次不为 null，执行上面的逻辑
+            }
+        }
+    }
+
+    /**
+     * 前序遍历 - 递归版
+     */
+    public void preorder2(Visitor<E> visitor) {
         if (visitor == null) return;
         preorder(root, visitor);
     }
@@ -173,10 +224,35 @@ public class BinaryTreeImpl<E> implements BinaryTree<E> {
     }
 
     /**
-     * 中序遍历
+     * 中序遍历 - 非递归版
      */
     @Override
     public void inorder(Visitor<E> visitor) {
+        if (visitor == null || root == null) return;
+
+        Node<E> node = root;
+        Stack<Node<E>> stack = new Stack<>(); // 准备一个栈
+
+        while (true) {
+            if (node != null) { // node 不为空
+                stack.push(node); // 将自己入栈
+                node = node.left; // 一直往左边走，直到左边为 null
+            } else { // 处理右边
+                if (stack.isEmpty()) return; // 如果 stack 也为空，直接返回
+                final Node<E> pop = stack.pop(); // 弹出栈顶元素
+                if (visitor.visit(pop.element)) return; // 访问元素，若外界需要停止，直接返回即可
+
+                if (pop.right != null) { // 若栈顶元素的左子节点不为空
+                   node = pop.right; // 让 node 再次不为 null，执行上面的逻辑
+                }
+            }
+        }
+    }
+
+    /**
+     * 中序遍历 - 递归版
+     */
+    public void inorder2(Visitor<E> visitor) {
         if (visitor == null) return;
         inorder(root, visitor);
     }
@@ -194,11 +270,40 @@ public class BinaryTreeImpl<E> implements BinaryTree<E> {
         // 最后使用递归方式，中序遍历右子树
         inorder(node.right, visitor);
     }
+
     /**
-     * 后序遍历
+     * 后序遍历 - 非递归版
      */
     @Override
     public void postorder(Visitor<E> visitor) {
+        if (visitor == null || root == null) return;
+
+        Stack<Node<E>> stack = new Stack<>();
+        stack.push(root); // 直接将根节点入栈
+        Node<E> prev = null; // 用于记录上一个被访问的元素
+
+        while (!stack.isEmpty()) {
+            final Node<E> peek = stack.peek(); // 只是看看栈顶元素，并不是弹出
+
+            // 如果栈顶元素是叶子节点 或 前一个访问的父节点是栈顶元素
+            if (peek.isLeaf() || (prev != null && prev.parent == peek)) {
+                prev = stack.pop(); // 弹出栈顶元素
+                if (visitor.visit(prev.element)) return; // 访问元素，若外界需要停止，直接返回即可
+            } else {
+                if (peek.right != null) { // 栈顶元素的右子节点不为空，将其入栈
+                    stack.push(peek.right);
+                }
+                if (peek.left != null) { // 栈顶元素的右子左子节点不为空，将其入栈
+                    stack.push(peek.left);
+                }
+            }
+        }
+    }
+
+    /**
+     * 后序遍历 - 递归版
+     */
+    public void postorder2(Visitor<E> visitor) {
         if (visitor == null) return;
         postorder(root, visitor);
     }

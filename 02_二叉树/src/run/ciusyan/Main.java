@@ -3,6 +3,7 @@ package run.ciusyan;
 import run.ciusyan.avltree.AVLTree;
 import run.ciusyan.binarysearchtree.BinarySearchTree;
 import run.ciusyan.binarysearchtree.impl.BSTImpl;
+import run.ciusyan.binarytree.impl.BinaryTreeImpl;
 import run.ciusyan.entity.Person;
 import run.ciusyan.printer.BinaryTrees;
 import run.ciusyan.redblacktree.RBTree;
@@ -141,15 +142,47 @@ public class Main {
         };
         BinarySearchTree<Integer> rbTree = new RBTree<>();
         for (Integer element : elements) {
-            System.out.println("【"+ element +"】");
             rbTree.add(element);
+        }
+        BinaryTrees.println(rbTree);
+
+        for (Integer element : elements) {
+            rbTree.remove(element);
+            System.out.println("【"+ element +"】");
             BinaryTrees.println(rbTree);
         }
 
     }
 
+    static void test7() {
+        Integer[] elements = new Integer[]{
+            20, 15, 25, 10, 18, 5, 12, 6, 11, 14
+        };
+        BinarySearchTree<Integer> bst = new BSTImpl<>();
+        for (Integer element : elements) {
+            bst.add(element);
+        }
+        BinaryTrees.println(bst);
+        BinaryTreeImpl.Visitor<Integer> visitor = new BinaryTreeImpl.Visitor<>() {
+            @Override
+            protected boolean visit(Integer element) {
+                System.out.print(element + " ");
+                return false;
+            }
+        };
+        System.out.print("前序遍历：");
+        bst.preorder(visitor);
+        System.out.println();
+        System.out.print("中序遍历：");
+        bst.inorder(visitor);
+        System.out.println();
+        System.out.print("后序遍历：");
+        bst.postorder(visitor);
+
+    }
+
     public static void main(String[] args) {
-        test5();
+        test7();
     }
 
 }

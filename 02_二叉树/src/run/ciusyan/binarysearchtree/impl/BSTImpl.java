@@ -89,9 +89,10 @@ public class BSTImpl<E> extends BinaryTreeImpl<E> implements BinarySearchTree<E>
         return new Node<>(element, parent);
     }
 
+
     /**
      * 提供模板的角色给子类实现【删除之后的处理】
-     * @param node：被删除的节点
+     * @param node：被删除的节点 or 用于取代的子节点
      */
     protected void afterRemove(Node<E> node) { }
 
@@ -125,14 +126,14 @@ public class BSTImpl<E> extends BinaryTreeImpl<E> implements BinarySearchTree<E>
                 node.parent.right = child;
             }
 
-            // 删除之后的处理
-            afterRemove(node);
+            // 删除之后的处理【这需要传入用于取代的子节点】
+            afterRemove(child);
         } else if (node.parent == null) { // 度为 0 的节点 —— 情况 ① 只有一个根节点的情况
             root = null;
 
             // 删除之后的处理
             afterRemove(node);
-        } else { // 度为 0 的节点 —— 情况 ①
+        } else { // 度为 0 的节点 —— 情况 ②
             // 看看待删除的叶子节点在它父节点的哪一边，在哪一边就删除谁
             if (node == node.parent.left) {
                 node.parent.left = null;
