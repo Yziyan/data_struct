@@ -41,8 +41,6 @@ secrets.yml
 .gradletasknamecache
 .sts4-cache
 
-02_二叉树/src/run/ciusyan/balancebinarysearchtree
-02_二叉树/src/run/ciusyan/redblacktree
-02_二叉树/src/run/ciusyan/Main.java
+
 03_集合
 04_映射

@@ -9,6 +9,7 @@ import run.ciusyan.printer.BinaryTrees;
 import run.ciusyan.redblacktree.RBTree;
 
 import java.util.Comparator;
+import java.util.Map;
 
 public class Main {
 
@@ -148,7 +149,7 @@ public class Main {
 
         for (Integer element : elements) {
             rbTree.remove(element);
-            System.out.println("【"+ element +"】");
+            System.out.println("【" + element + "】");
             BinaryTrees.println(rbTree);
         }
 
