@@ -1,8 +1,7 @@
 package run.ciusyan;
 
 import run.ciusyan.map.Map;
-import run.ciusyan.map.Student;
-import run.ciusyan.map.TreeMap;;import java.util.Scanner;
+import run.ciusyan.map.TreeMap;
 
 public class Main {
 
@@ -32,15 +31,8 @@ public class Main {
         System.out.println(map.size());
     }
 
-
-    final int b;
-    public Main() {
-        b = 10;
-    }
     public static void main(String[] args) {
-        final int a; // 这种叫使用时常量。在使用时必须赋初始值
-        a = 10;
-        System.out.println(a); // 比如说这里使用了 a ，就必须赋值后才能使用
+
     }
 
 }
