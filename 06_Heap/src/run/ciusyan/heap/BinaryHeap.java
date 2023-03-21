@@ -64,7 +64,7 @@ public class BinaryHeap<E> extends AbstractHeap<E> implements BinaryTreeInfo {
             int pIndex = (index - 1) >> 1; // 计算父节点的索引
             E p = elements[pIndex];
 
-            if (compare(e, p) <= 0) return; // 如果上滤节点 <= 父节点时，说明可以终止上滤了
+            if (compare(e, p) <= 0) break; // 如果上滤节点 <= 父节点时，说明可以终止上滤了
 
             // 来到这里，需要将父节点下移，然后进入下一轮循环
             elements[index] = p;
