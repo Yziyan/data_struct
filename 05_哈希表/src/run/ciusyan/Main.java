@@ -1,12 +1,17 @@
 package run.ciusyan;
 
+import run.ciusyan.file.FileInfo;
+import run.ciusyan.file.Files;
 import run.ciusyan.map.HashMap;
+import run.ciusyan.map.LinkedHashMap;
 import run.ciusyan.map.Map;
 import run.ciusyan.model.Key;
 import run.ciusyan.model.SubKey1;
 import run.ciusyan.model.SubKey2;
 
 public class Main {
+
+
 
 	static void test1Map(Map<String, Integer> map, String[] words) {
 		Times.test(map.getClass().getName(), () -> {
@@ -28,6 +33,17 @@ public class Main {
         });
 	}
 
+    static void test1() {
+        String filepath = "D:\\GoLang\\go_root\\src";
+        FileInfo fileInfo = Files.read(filepath, null);
+        String[] words = fileInfo.words();
+
+        System.out.println("总行数：" + fileInfo.getLines());
+        System.out.println("单词总数：" + words.length);
+        System.out.println("-------------------------------------");
+
+        test1Map(new HashMap<>(), words);
+    }
 
 	static void test2(HashMap<Object, Integer> map) {
 		for (int i = 1; i <= 20; i++) {
@@ -112,11 +128,16 @@ public class Main {
 
 	public static void main(String[] args) {
 
-		test2(new HashMap<>());
-		test3(new HashMap<>());
-		test4(new HashMap<>());
-		test5(new HashMap<>());
+//        test1();
+//		test2(new HashMap<>());
+//		test3(new HashMap<>());
+//		test4(new HashMap<>());
+//		test5(new HashMap<>());
 
+		test2(new LinkedHashMap<>());
+		test3(new LinkedHashMap<>());
+        test4(new LinkedHashMap<>());
+		test5(new LinkedHashMap<>());
 	}
 
 }
