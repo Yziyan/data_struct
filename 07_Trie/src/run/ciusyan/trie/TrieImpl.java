@@ -5,7 +5,7 @@ import java.util.HashMap;
 public class TrieImpl<V> implements Trie<V> {
 
     private int size;
-    private Node<V> root = new Node<>();
+    private Node<V> root;
 
 
 
@@ -22,31 +22,44 @@ public class TrieImpl<V> implements Trie<V> {
     @Override
     public void clear() {
         size = 0;
-        root.children.clear();
+        root = null;
     }
 
     @Override
     public V get(String key) {
         Node<V> node = node(key);
-        return node == null ? null : node.value;
+
+        return node != null && node.word ? node.value : null;
     }
 
     @Override
     public boolean contains(String str) {
-        return node(str) != null;
+        Node<V> node = node(str);
+
+        return node != null && node.word;
     }
 
     @Override
     public V add(String key, V value) {
         keyCheck(key); // 检查key
 
+        if (root == null) {
+            root = new Node<>(null);
+        }
+
         Node<V> currentNode = root;
         for (int i = 0; i < key.length(); i++) {
             char c = key.charAt(i);
-            Node<V> childNode = currentNode.getChildren().get(c);
+            boolean childEmpty = currentNode.children == null;
+
+            Node<V> childNode = childEmpty ? null : currentNode.children.get(c);
             if (childNode == null) {
                 // 来到这里说明子节点为空，说明此字符未上树，将其上树
-                childNode = new Node<>();
+
+                // 这是判断是否有children，有就用自己的，没有就新建
+                currentNode.children = childEmpty ?  new HashMap<>() : currentNode.children;
+                childNode = new Node<>(currentNode);
+                childNode.character = c;
                 currentNode.children.put(c, childNode);
             }
 
@@ -67,22 +80,38 @@ public class TrieImpl<V> implements Trie<V> {
 
     @Override
     public V remove(String str) {
-        return null;
+        Node<V> node = node(str);
+
+        if (node == null || !node.word) return null;
+
+        // 能来到这里，肯定需要删除了
+        size--;
+        V oldValue = node.value;
+
+        if (node.children != null && !node.children.isEmpty()) {
+            // 来到这里说明需要清除单词标记即可
+            node.word = false;
+
+            return oldValue;
+        }
+
+        // 能来到这里，说明没有子节点，需要向上遍历，查看是否需要删除
+        Node<V> parent;
+        while ((parent = node.parent) != null) {
+            parent.children.remove(node.character);
+
+            // 需要判断父节点有没有单词标记，or 它还有其他子节点吗？有就直接退出，就不用往上走了
+            if (parent.word || !parent.children.isEmpty()) break;
+
+            node = parent;
+        }
+
+        return oldValue;
     }
 
     @Override
     public boolean starsWith(String prefix) {
-        keyCheck(prefix);
-
-        Node<V> currentNode = root;
-        for (int i = 0; i < prefix.length(); i++) {
-            char c = prefix.charAt(i);
-            currentNode = currentNode.getChildren().get(c);
-
-            if (currentNode == null) return false;
-        }
-
-        return true;
+        return node(prefix) != null;
     }
 
     /**
@@ -95,16 +124,16 @@ public class TrieImpl<V> implements Trie<V> {
 
         Node<V> currentNode = root;
         for (int i = 0; i < key.length(); i++) {
-            char c = key.charAt(i);
+            if (currentNode == null || currentNode.children == null || currentNode.children.isEmpty()) return null;
 
+            char c = key.charAt(i);
             // 根据字符取出 child节点
-            currentNode = currentNode.getChildren().get(c);
-            if (currentNode == null) return null; // 说明此字符节点不存在，那么别提单词存在了
+            currentNode = currentNode.children.get(c);
         }
 
         // 能来到后面，说明此单词的所有字符都存在，还得查看是否为一个单词
 
-        return currentNode.word ? currentNode : null;
+        return currentNode;
     }
 
     private void keyCheck(String key) {
@@ -114,6 +143,10 @@ public class TrieImpl<V> implements Trie<V> {
     }
 
     private static class Node<V> {
+        // 该节点的父节点
+        Node<V> parent;
+        // 该节点存储的字符
+        Character character;
         // 代表每一个节点的子节点
         HashMap<Character, Node<V>> children;
         // 如果字符是一个单词的结尾，存储的值
@@ -121,11 +154,8 @@ public class TrieImpl<V> implements Trie<V> {
         // 是否是一个完整的单词
         boolean word;
 
-        /**
-         * 获取子节点
-         */
-        public HashMap<Character, Node<V>> getChildren() {
-            return children == null ? (children = new HashMap<>()) : children;
+        public Node(Node<V> parent) {
+            this.parent = parent;
         }
     }
 
