@@ -3,6 +3,7 @@ package run.ciusyan;
 import run.ciusyan.heap.BinaryHeap;
 import run.ciusyan.heap.Heap;
 import run.ciusyan.printer.BinaryTrees;
+import run.ciusyan.queue.PriorityQueue;
 
 public class Main {
 
@@ -62,8 +63,42 @@ public class Main {
         BinaryTrees.println(heap);
     }
 
-    public static void main(String[] args) {
-        test4();
+    static void test5() {
+        PriorityQueue<Person> queue = new PriorityQueue<>();
+        queue.enQueue(new Person("cyan", 5));
+        queue.enQueue(new Person("zyan", 3));
+        queue.enQueue(new Person("zhiyan", 100));
+        queue.enQueue(new Person("ciusyan", 10));
+
+        while (!queue.isEmpty()) {
+            System.out.println(queue.deQueue());
+        }
     }
 
+    public static void main(String[] args) {
+        test5();
+    }
+}
+
+class Person implements Comparable<Person> {
+    private String name;
+    private int vipLevel;
+
+    public Person(String name, int vipLevel) {
+        this.name = name;
+        this.vipLevel = vipLevel;
+    }
+
+    @Override
+    public String toString() {
+        return "Person{" +
+            "name='" + name + '\'' +
+            ", vipLevel=" + vipLevel +
+            '}';
+    }
+
+    @Override
+    public int compareTo(Person o) {
+        return this.vipLevel - o.vipLevel;
+    }
 }
