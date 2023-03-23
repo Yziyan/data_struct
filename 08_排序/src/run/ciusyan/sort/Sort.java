@@ -1,5 +1,7 @@
 package run.ciusyan.sort;
 
+import run.ciusyan.model.Student;
+
 import java.text.DecimalFormat;
 
 public abstract class Sort<E extends Comparable<E>> implements Comparable<Sort<E>> {
@@ -91,12 +93,31 @@ public abstract class Sort<E extends Comparable<E>> implements Comparable<Sort<E
         String timeStr = "耗时：" + (time / 1000.0) + "s(" + time + "ms)";
         String compareCountStr = "比较：" + numberString(cmpCount);
         String swapCountStr = "交换：" + numberString(swapCount);
+        String stableStr = "稳定性：" + isStable();
         return "【" + getClass().getSimpleName() + "】\n"
+            + stableStr + " \t"
             + timeStr + " \t"
             + compareCountStr + "\t "
             + swapCountStr + "\n"
             + "------------------------------------------------------------------";
 
+    }
+
+    private boolean isStable() {
+
+        Student[] students = new Student[20];
+        for (int i = 0; i < students.length; i++) {
+            students[i] = new Student(i * 10, 21);
+        }
+
+        // 将其排序
+        sort((E[]) students);
+
+        for (int i = 1; i < students.length; i++) {
+            if (students[i].getScore() - students[i - 1].getScore() != 10) return false;
+        }
+
+        return true;
     }
 
     private String numberString(int number) {
