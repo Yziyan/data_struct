@@ -1,6 +1,6 @@
 package run.ciusyan.sort;
 
-public class Heap extends Sort {
+public class Heap<E extends Comparable<E>> extends Sort<E> {
     private int heapSize;
 
     @Override
@@ -28,20 +28,20 @@ public class Heap extends Sort {
     private void siftDown(int index) {
         int half = heapSize >> 1; // 非叶子节点的数量
 
-        Integer element = array[half]; // 下滤节点的值
+        E element = array[half]; // 下滤节点的值
         while (index < half) { // 说明之后是叶子节点了，没必要下滤了
             int childIndex = (index << 1) + 1; // 算出左子节点的索引
-            Integer child = array[childIndex]; // 默认取出左子节点
+            E child = array[childIndex]; // 默认取出左子节点
 
             int rightIndex = childIndex + 1;
-            if (rightIndex < heapSize && cmpEle(array[rightIndex], child) > 0) {
+            if (rightIndex < heapSize && cmp(array[rightIndex], child) > 0) {
                 // 说明有右子节点，并且值比左边的大
                 childIndex = rightIndex;
                 child = array[rightIndex];
             }
 
             // 说明找到位置了
-            if (cmpEle(element, child) > 0) break;
+            if (cmp(element, child) > 0) break;
 
             // 来到这里，需要将子节点上移
             array[index] = child;

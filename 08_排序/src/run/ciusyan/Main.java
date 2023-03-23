@@ -8,8 +8,9 @@ import java.util.Arrays;
 
 public class Main {
 
-    static void testSort(Integer[] array, Sort... sorts) {
-        for (Sort sort : sorts) {
+    @SafeVarargs
+    static void testSort(Integer[] array, Sort<Integer>... sorts) {
+        for (Sort<Integer> sort : sorts) {
             Integer[] newArr = Integers.copy(array);
             sort.sort(newArr);
             Asserts.test(Integers.isAscOrder(newArr));
@@ -17,7 +18,7 @@ public class Main {
 
         Arrays.sort(sorts);
 
-        for (Sort sort : sorts) {
+        for (Sort<Integer> sort : sorts) {
             System.out.println(sort);
         }
     }
@@ -25,11 +26,11 @@ public class Main {
     public static void main(String[] args) {
         Integer[] array = Integers.random(10000, 1, 20000);
         testSort(array,
-            new Bubble1(),
-            new Bubble2(),
-            new Bubble3(),
-            new Selection(),
-            new Heap()
+            new Bubble1<>(),
+            new Bubble2<>(),
+            new Bubble3<>(),
+            new Selection<>(),
+            new Heap<>()
         );
     }
 }

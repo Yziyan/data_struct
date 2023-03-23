@@ -3,7 +3,7 @@ package run.ciusyan.sort;
 /**
  * 冒泡排序 - 基础版本
  */
-public class Bubble1 extends Sort {
+public class Bubble1<E extends Comparable<E>> extends Sort<E> {
 
     @Override
     protected void sort() {

@@ -6,7 +6,7 @@ import run.ciusyan.tools.Integers;
 /**
  * 选择排序
  */
-public class Selection extends Sort {
+public class Selection<E extends Comparable<E>> extends Sort<E> {
 
     @Override
     public void sort() {

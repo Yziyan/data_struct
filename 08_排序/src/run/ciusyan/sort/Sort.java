@@ -2,11 +2,11 @@ package run.ciusyan.sort;
 
 import java.text.DecimalFormat;
 
-public abstract class Sort implements Comparable<Sort> {
+public abstract class Sort<E extends Comparable<E>> implements Comparable<Sort<E>> {
     /**
      * 排序的数组
      */
-    protected Integer[] array;
+    protected E[] array;
     /**
      * 用于统计排序用时
      */
@@ -25,7 +25,7 @@ public abstract class Sort implements Comparable<Sort> {
      * 给外界使用的方法
      * @param array：需要排序的元素
      */
-    public void sort(Integer[] array) {
+    public void sort(E[] array) {
         if (array == null || array.length <= 2) return;
 
         this.array = array;
@@ -43,7 +43,7 @@ public abstract class Sort implements Comparable<Sort> {
 
 
     @Override
-    public int compareTo(Sort o) {
+    public int compareTo(Sort<E> o) {
         int res = (int) (time - o.time);
         if (res != 0) return res;
 
@@ -63,16 +63,16 @@ public abstract class Sort implements Comparable<Sort> {
     protected int cmp(int i1, int i2) {
         cmpCount++;
 
-        return array[i1] - array[i2];
+        return array[i1].compareTo(array[i2]);
     }
 
     /**
      * 用于比较两个元素的大小
      */
-    protected int cmpEle(Integer e1, Integer e2) {
+    protected int cmp(E e1, E e2) {
         cmpCount++;
 
-        return e1 - e2;
+        return e1.compareTo(e2);
     }
 
     /**
@@ -81,7 +81,7 @@ public abstract class Sort implements Comparable<Sort> {
     protected void swap(int i1, int i2) {
         swapCount++;
 
-        Integer temp = array[i1];
+        E temp = array[i1];
         array[i1] = array[i2];
         array[i2] = temp;
     }
