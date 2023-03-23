@@ -1,23 +1,35 @@
 package run.ciusyan;
 
-import run.ciusyan.sort.Bubble;
-import run.ciusyan.sort.Selection;
+import run.ciusyan.sort.*;
+import run.ciusyan.tools.Asserts;
 import run.ciusyan.tools.Integers;
-import run.ciusyan.tools.Times;
+
+import java.util.Arrays;
 
 public class Main {
 
-    static void testBubble() {
-        Bubble.test1();
-        Bubble.test2();
-    }
+    static void testSort(Integer[] array, Sort... sorts) {
+        for (Sort sort : sorts) {
+            Integer[] newArr = Integers.copy(array);
+            sort.sort(newArr);
+            Asserts.test(Integers.isAscOrder(newArr));
+        }
 
-    static void testSelection() {
-        Selection.test();
+        Arrays.sort(sorts);
+
+        for (Sort sort : sorts) {
+            System.out.println(sort);
+        }
     }
 
     public static void main(String[] args) {
-        // testBubble();
-        testSelection();
+        Integer[] array = Integers.random(10000, 1, 20000);
+        testSort(array,
+            new Bubble1(),
+            new Bubble2(),
+            new Bubble3(),
+            new Selection(),
+            new Heap()
+        );
     }
 }
