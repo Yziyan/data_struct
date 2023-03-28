@@ -1,5 +1,7 @@
 package run.ciusyan.sort;
 
+import run.ciusyan.Main;
+
 public class Quick<E extends Comparable<E>> extends Sort<E> {
     @Override
     protected void sort() {
@@ -27,6 +29,10 @@ public class Quick<E extends Comparable<E>> extends Sort<E> {
      * @return ：轴点元素的最终位置
      */
     private int pivotIndex(int begin, int end) {
+        // 为了减少最坏时间复杂度，我们随机选择一个序列中的元素作为轴点
+        // [0, 1) -> [0, end - begin) -> [begin, end)
+        swap(begin, (int) (begin + Math.random() * (end - begin)));
+
         // 将轴点元素备份
         E pivot = array[begin];
 
