@@ -7,19 +7,28 @@ public class Insertion3<E extends Comparable<E>> extends Sort<E> {
     @Override
     protected void sort() {
         for (int begin = 1; begin < array.length; begin++) {
-            // 将插入元素（待排序）备份
-            E insertEle = array[begin];
-
             // 找到插入位置
             int insertIndex = search(begin);
 
-            // 将元素挨个挪动到目标位置
-            for (int i = begin; i > insertIndex ; i--) {
-                array[i] = array[i - 1];
-            }
-
-            array[insertIndex] = insertEle;
+            // 插入元素
+            insert(begin, insertIndex);
         }
+    }
+
+    /**
+     * 将元素插入到目标位置
+     * @param src：源位置
+     * @param dest：目标位置
+     */
+    private void insert(int src, int dest) {
+        // 将插入元素（待排序）备份
+        E insertEle = array[src];
+
+        for (int i = src; i > dest; i--) {
+            array[i] = array[i - 1];
+        }
+
+        array[dest] = insertEle;
     }
 
     /**
