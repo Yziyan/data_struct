@@ -31,7 +31,8 @@ public class Main {
             new Selection<>(),
             new Heap<>(),
             new Merge<>(),
-            new Quick<>()
+            new Quick<>(),
+            new Shell<>()
         );
     }
 
