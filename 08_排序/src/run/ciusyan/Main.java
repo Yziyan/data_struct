@@ -24,15 +24,14 @@ public class Main {
     }
 
     static void test1() {
-        Integer[] array = Integers.random(10000, 1, 20000);
+        Integer[] array = Integers.random(20000, 1, 100000);
         testSort(array,
-            new Insertion1<>(),
-            new Insertion2<>(),
             new Insertion3<>(),
             new Bubble3<>(),
             new Selection<>(),
             new Heap<>(),
-            new Merge<>()
+            new Merge<>(),
+            new Quick<>()
         );
     }
 
