@@ -28,6 +28,7 @@ public class Main {
         testSort(array,
             new Insertion1<>(),
             new Insertion2<>(),
+            new Insertion3<>(),
             new Bubble3<>(),
             new Selection<>(),
             new Heap<>()
@@ -51,6 +52,6 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        test2();
+        test1();
     }
 }
