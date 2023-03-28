@@ -31,7 +31,8 @@ public class Main {
             new Insertion3<>(),
             new Bubble3<>(),
             new Selection<>(),
-            new Heap<>()
+            new Heap<>(),
+            new Merge<>()
         );
     }
 
