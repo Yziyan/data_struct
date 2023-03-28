@@ -42,6 +42,12 @@ public class Main {
         Asserts.test(BinarySearch.indexOf(array, 10) == 5);
         Asserts.test(BinarySearch.indexOf(array, 20) == -1);
 
+        Asserts.test(BinarySearch.search(array, 3) == 2);
+        Asserts.test(BinarySearch.search(array, 6) == 4);
+        Asserts.test(BinarySearch.search(array, 2) == 1);
+        Asserts.test(BinarySearch.search(array, 10) == 6);
+        Asserts.test(BinarySearch.search(array, 20) == 6);
+        Asserts.test(BinarySearch.search(array, 1) == 0);
     }
 
     public static void main(String[] args) {
