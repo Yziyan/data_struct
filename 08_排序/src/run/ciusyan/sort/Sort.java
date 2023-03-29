@@ -1,6 +1,7 @@
 package run.ciusyan.sort;
 
 import run.ciusyan.model.Student;
+import run.ciusyan.sort.cmp.Shell;
 
 import java.text.DecimalFormat;
 
@@ -104,6 +105,7 @@ public abstract class Sort<E extends Comparable<E>> implements Comparable<Sort<E
     }
 
     private boolean isStable() {
+        if (this instanceof Counting) return false;
         if (this instanceof Shell) return false;
 
         Student[] students = new Student[20];

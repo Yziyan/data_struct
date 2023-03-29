@@ -1,4 +1,6 @@
-package run.ciusyan.sort;
+package run.ciusyan.sort.cmp;
+
+import run.ciusyan.sort.Sort;
 
 /**
  * 冒泡排序 - 优化1

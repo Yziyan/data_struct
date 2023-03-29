@@ -1,4 +1,6 @@
-package run.ciusyan.sort;
+package run.ciusyan.sort.cmp;
+
+import run.ciusyan.sort.Sort;
 
 public class Heap<E extends Comparable<E>> extends Sort<E> {
     private int heapSize;

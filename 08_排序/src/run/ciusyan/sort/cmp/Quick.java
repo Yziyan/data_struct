@@ -1,6 +1,7 @@
-package run.ciusyan.sort;
+package run.ciusyan.sort.cmp;
 
 import run.ciusyan.Main;
+import run.ciusyan.sort.Sort;
 
 public class Quick<E extends Comparable<E>> extends Sort<E> {
     @Override

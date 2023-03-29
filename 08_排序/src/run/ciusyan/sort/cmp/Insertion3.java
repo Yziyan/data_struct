@@ -1,4 +1,6 @@
-package run.ciusyan.sort;
+package run.ciusyan.sort.cmp;
+
+import run.ciusyan.sort.Sort;
 
 /**
  * 插入排序 利用二分搜索优化

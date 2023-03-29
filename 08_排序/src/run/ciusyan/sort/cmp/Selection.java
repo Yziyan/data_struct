@@ -1,5 +1,6 @@
-package run.ciusyan.sort;
+package run.ciusyan.sort.cmp;
 
+import run.ciusyan.sort.Sort;
 import run.ciusyan.tools.Asserts;
 import run.ciusyan.tools.Integers;
 

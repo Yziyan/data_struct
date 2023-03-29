@@ -1,6 +1,7 @@
 package run.ciusyan;
 
 import run.ciusyan.sort.*;
+import run.ciusyan.sort.cmp.*;
 import run.ciusyan.tools.Asserts;
 import run.ciusyan.tools.Integers;
 
@@ -24,15 +25,16 @@ public class Main {
     }
 
     static void test1() {
-        Integer[] array = Integers.random(20000, 1, 100000);
+        Integer[] array = Integers.random(10000, 1, 20000);
         testSort(array,
-            new Insertion3<>(),
-            new Bubble3<>(),
-            new Selection<>(),
-            new Heap<>(),
-            new Merge<>(),
-            new Quick<>(),
-            new Shell<>()
+              new Counting()
+//            new Insertion3<>(),
+//            new Bubble3<>(),
+//            new Selection<>(),
+//            new Heap<>(),
+//            new Merge<>(),
+//            new Quick<>(),
+//            new Shell<>()
         );
     }
 

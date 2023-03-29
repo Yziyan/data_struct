@@ -1,4 +1,6 @@
-package run.ciusyan.sort;
+package run.ciusyan.sort.cmp;
+
+import run.ciusyan.sort.Sort;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +38,9 @@ public class Shell<E extends Comparable<E>> extends Sort<E> {
         }
     }
 
+    /**
+     * 希尔本人推荐的步长序列
+     */
     private List<Integer> shellStepSequence() {
         List<Integer> steps = new ArrayList<>();
         int step = array.length;
@@ -46,5 +51,4 @@ public class Shell<E extends Comparable<E>> extends Sort<E> {
 
         return steps;
     }
-
 }
