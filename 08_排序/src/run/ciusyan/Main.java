@@ -27,7 +27,8 @@ public class Main {
     static void test1() {
         Integer[] array = Integers.random(10000, 1, 20000);
         testSort(array,
-              new Counting()
+              new Counting(),
+              new Radix()
 //            new Insertion3<>(),
 //            new Bubble3<>(),
 //            new Selection<>(),

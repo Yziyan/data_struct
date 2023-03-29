@@ -105,6 +105,7 @@ public abstract class Sort<E extends Comparable<E>> implements Comparable<Sort<E
     }
 
     private boolean isStable() {
+        if (this instanceof Radix) return true;
         if (this instanceof Counting) return true;
         if (this instanceof Shell) return false;
 
