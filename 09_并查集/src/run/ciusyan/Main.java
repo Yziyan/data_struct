@@ -2,10 +2,7 @@ package run.ciusyan;
 
 import run.ciusyan.tools.Asserts;
 import run.ciusyan.tools.Times;
-import run.ciusyan.uf.UnionFInd_QF;
-import run.ciusyan.uf.UnionFind;
-import run.ciusyan.uf.UnionFind_QU;
-import run.ciusyan.uf.UnionFind_QU_S;
+import run.ciusyan.uf.*;
 
 public class Main {
 
@@ -15,10 +12,12 @@ public class Main {
         test01(new UnionFInd_QF(12));
         test01(new UnionFind_QU(12));
         test01(new UnionFind_QU_S(12));
+        test01(new UnionFInd_QU_R(12));
 
 //        test02(new UnionFInd_QF(COUNT));
 //        test02(new UnionFind_QU(COUNT));
         test02(new UnionFind_QU_S(COUNT));
+        test02(new UnionFInd_QU_R(COUNT));
     }
 
 
