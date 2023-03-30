@@ -6,7 +6,7 @@ import run.ciusyan.uf.*;
 
 public class Main {
 
-    private final static int COUNT = 500000;
+    private final static int COUNT = 5000000;
 
     public static void main(String[] args) {
 //        test(new UnionFInd_QF(COUNT));
@@ -15,6 +15,7 @@ public class Main {
         test(new UnionFInd_QU_R(COUNT));
         test(new UnionFind_QU_R_PC(COUNT));
         test(new UnionFind_QU_R_PS(COUNT));
+        test(new UnionFind_QU_R_PH(COUNT));
     }
 
 
