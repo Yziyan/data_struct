@@ -1,4 +1,4 @@
-package run.ciusyan;
+package run.ciusyan.tools;
 
 public class Asserts {
 	public static void test(boolean value) {

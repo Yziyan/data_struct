@@ -1,5 +1,8 @@
 package run.ciusyan.uf;
 
+/**
+ * 使用 Quick Union 的方式 实现
+ */
 public class UnionFind_QU extends UnionFind {
 
     public UnionFind_QU(int capacity) {
