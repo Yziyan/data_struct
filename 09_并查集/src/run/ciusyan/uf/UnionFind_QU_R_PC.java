@@ -18,6 +18,7 @@ public class UnionFind_QU_R_PC extends UnionFInd_QU_R {
             parents[v] = find(parents[v]);
         }
 
+        // 最终开始递归返回的时候，已经将路径上的parents[v]，赋值为 根节点了
         return parents[v];
     }
 }
