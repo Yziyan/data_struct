@@ -6,23 +6,18 @@ import run.ciusyan.uf.*;
 
 public class Main {
 
-    private final static int COUNT = 500000;
+    private final static int COUNT = 5000000;
 
     public static void main(String[] args) {
-        test01(new UnionFInd_QF(12));
-        test01(new UnionFind_QU(12));
-        test01(new UnionFind_QU_S(12));
-        test01(new UnionFInd_QU_R(12));
-
-//        test02(new UnionFInd_QF(COUNT));
-//        test02(new UnionFind_QU(COUNT));
-        test02(new UnionFind_QU_S(COUNT));
-        test02(new UnionFInd_QU_R(COUNT));
+//        test(new UnionFInd_QF(COUNT));
+//        test(new UnionFind_QU(COUNT));
+        test(new UnionFind_QU_S(COUNT));
+        test(new UnionFInd_QU_R(COUNT));
+        test(new UnionFind_QU_R_PC(COUNT));
     }
 
 
-    static void test01( UnionFind uf) {
-        uf.union(0, 1);
+    static void test(UnionFind uf) {uf.union(0, 1);
         uf.union(0, 3);
         uf.union(0, 4);
         uf.union(2, 3);
@@ -39,9 +34,7 @@ public class Main {
         uf.union(4, 6);
 
         Asserts.test(uf.isSame(2, 7));
-    }
 
-    static void test02(UnionFind uf) {
         Times.test(uf.getClass().getSimpleName(), () -> {
             for (int i = 0; i < COUNT; i++) {
                 uf.union((int)(Math.random() * COUNT), (int)(Math.random() * COUNT));
