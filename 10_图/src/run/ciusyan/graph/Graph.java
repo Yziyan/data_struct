@@ -52,4 +52,10 @@ public interface Graph<V, E> {
      * @param begin：起点
      */
     void bfs(V begin);
+
+    /**
+     * 深度优先遍历
+     * @param begin：起点
+     */
+    void dfs(V begin);
 }

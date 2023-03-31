@@ -5,7 +5,12 @@ import run.ciusyan.graph.ListGraph;
 
 public class Main {
     public static void main(String[] args) {
-        testBfs();
+        testDfs();
+    }
+
+    static void testDfs() {
+        Graph<Object, Double> graph = undirectedGraph(Data.DFS_01);
+        graph.dfs(1);
     }
 
     static void testBfs() {

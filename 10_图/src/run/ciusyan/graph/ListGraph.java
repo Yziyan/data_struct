@@ -249,12 +249,33 @@ public class ListGraph<V, E> implements Graph<V, E> {
             // 根据起点，找到它的出边
             for (Edge<V, E> edge : vertex.outEdges) {
                 // 根据相连的边，找到终点，将其入队，但是需要判断是否已经遍历过了
-                if (!visitedVertices.contains(edge.to)) {
-                    queue.offer(edge.to);
-                    visitedVertices.add(edge.to);
-                }
-            }
+                if (visitedVertices.contains(edge.to)) continue;
 
+                queue.offer(edge.to);
+                visitedVertices.add(edge.to);
+            }
+        }
+    }
+
+    @Override
+    public void dfs(V begin) {
+        Vertex<V, E> beginVertex = vertices.get(begin);
+        if (beginVertex == null) return;
+
+        dfs(beginVertex, new HashSet<>());
+    }
+
+    private void dfs(Vertex<V, E> vertex, Set<Vertex<V, E>> visitedVertices) {
+        // 访问顶点
+        System.out.println(vertex.value);
+        visitedVertices.add(vertex); // 代表已经访问过了
+
+        // 将能达到的终点，进行递归调用
+        for (Edge<V, E> edge : vertex.outEdges) {
+            // 将其终点进行递归调用，但是需要查看是否已经遍历过了
+            if (visitedVertices.contains(edge.to)) continue;
+
+            dfs(edge.to, visitedVertices);
         }
     }
 }
