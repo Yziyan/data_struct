@@ -224,4 +224,37 @@ public class ListGraph<V, E> implements Graph<V, E> {
             return "Edge [from=" + from + ", to=" + to + ", weight=" + weight + "]";
         }
     }
+
+    @Override
+    public void bfs(V begin) {
+        Vertex<V, E> beginVertex = vertices.get(begin);
+        if (beginVertex == null) return;
+
+        // 准备一个集合，用于记录已经遍历过的节点
+        Set<Vertex<V, E>> visitedVertices = new HashSet<>();
+
+        // 准备一个队列
+        Queue<Vertex<V, E>> queue = new LinkedList<>();
+        // 将起点入队
+        queue.offer(beginVertex);
+        visitedVertices.add(beginVertex);
+
+        // 队列不为空，就一直遍历
+        while (!queue.isEmpty()) {
+
+            // 访问对头元素
+            Vertex<V, E> vertex = queue.poll();
+            System.out.println(vertex.value);
+
+            // 根据起点，找到它的出边
+            for (Edge<V, E> edge : vertex.outEdges) {
+                // 根据相连的边，找到终点，将其入队，但是需要判断是否已经遍历过了
+                if (!visitedVertices.contains(edge.to)) {
+                    queue.offer(edge.to);
+                    visitedVertices.add(edge.to);
+                }
+            }
+
+        }
+    }
 }
