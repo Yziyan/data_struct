@@ -5,6 +5,15 @@ import run.ciusyan.graph.ListGraph;
 
 public class Main {
     public static void main(String[] args) {
+        testBfs();
+    }
+
+    static void testBfs() {
+        Graph<Object, Double> graph = undirectedGraph(Data.BFS_01);
+        graph.bfs("A");
+    }
+
+    static void test01() {
         ListGraph<String, Integer> graph = new ListGraph<>();
         graph.addEdge("v1", "v0", 9);
         graph.addEdge("v1", "v2", 3);
@@ -13,9 +22,49 @@ public class Main {
         graph.addEdge("v3", "v4", 1);
         graph.addEdge("v0", "v4", 6);
         // graph.removeEdge("v0", "v4");
-        // graph.removeVertex("v0");
-        graph.bfs("v1");
+        graph.removeVertex("v0");
 
-        // graph.print();
+        graph.print();
+    }
+
+
+    /**
+     * 有向图
+     */
+    private static Graph<Object, Double> directedGraph(Object[][] data) {
+        Graph<Object, Double> graph = new ListGraph<>();
+        for (Object[] edge : data) {
+            if (edge.length == 1) {
+                graph.addVertex(edge[0]);
+            } else if (edge.length == 2) {
+                graph.addEdge(edge[0], edge[1]);
+            } else if (edge.length == 3) {
+                double weight = Double.parseDouble(edge[2].toString());
+                graph.addEdge(edge[0], edge[1], weight);
+            }
+        }
+        return graph;
+    }
+
+    /**
+     * 无向图
+     * @param data
+     * @return
+     */
+    private static Graph<Object, Double> undirectedGraph(Object[][] data) {
+        Graph<Object, Double> graph = new ListGraph<>();
+        for (Object[] edge : data) {
+            if (edge.length == 1) {
+                graph.addVertex(edge[0]);
+            } else if (edge.length == 2) {
+                graph.addEdge(edge[0], edge[1]);
+                graph.addEdge(edge[1], edge[0]);
+            } else if (edge.length == 3) {
+                double weight = Double.parseDouble(edge[2].toString());
+                graph.addEdge(edge[0], edge[1], weight);
+                graph.addEdge(edge[1], edge[0], weight);
+            }
+        }
+        return graph;
     }
 }
