@@ -3,9 +3,18 @@ package run.ciusyan;
 import run.ciusyan.graph.Graph;
 import run.ciusyan.graph.ListGraph;
 
+import java.util.List;
+
 public class Main {
     public static void main(String[] args) {
-        testDfs();
+        testTopo();
+    }
+
+
+    static void testTopo() {
+        Graph<Object, Double> graph = directedGraph(Data.TOPO);
+        List<Object> topoRes = graph.topological();
+        System.out.println(topoRes);
     }
 
     static void testDfs() {

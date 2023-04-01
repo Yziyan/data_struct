@@ -353,4 +353,47 @@ public class ListGraph<V, E> implements Graph<V, E> {
             dfs(edge.to, visitedVertices, visitor);
         }
     }
+
+    @Override
+    public List<V> topological() {
+
+        // 准备一个 List，用于记录 Topo 排序结果
+        List<V> topoResult = new ArrayList<>();
+        // 准备一个 Queue，用于过渡中间结果
+        Queue<Vertex<V, E>> queue = new LinkedList<>();
+        // 准备一个 Map，用于记录顶点的入度
+        Map<Vertex<V, E>, Integer> map = new HashMap<>();
+
+        // 初始化操作
+        vertices.forEach(((v, vertex) -> {
+            int ins = vertex.inEdges.size(); // 获取顶点的入度
+
+            if (ins == 0) { // 将其入队
+                queue.offer(vertex);
+            } else { // 记录 入度值
+                map.put(vertex, ins);
+            }
+        }));
+
+        // 直至队列为空
+        while (!queue.isEmpty()) {
+            // 队头出队，作为起点
+            Vertex<V, E> vertex = queue.poll();
+            // 将其加入 res 中
+            topoResult.add(vertex.value);
+
+            // 然后遍历它的出边，找到对应的终点
+            for (Edge<V, E> edge : vertex.outEdges) {
+                Integer ins = map.get(edge.to) - 1; // 拿到终点的入度 - 1
+
+                if (ins == 0) { // 将其终点入队
+                    queue.offer(edge.to);
+                } else { // 更新入度
+                    map.put(edge.to, ins);
+                }
+            }
+        }
+
+        return topoResult;
+    }
 }

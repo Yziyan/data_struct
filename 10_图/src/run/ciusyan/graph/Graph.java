@@ -1,5 +1,7 @@
 package run.ciusyan.graph;
 
+import java.util.List;
+
 /**
  * 图的接口
  * @param <V>：顶点存储的元素类型
@@ -60,6 +62,12 @@ public interface Graph<V, E> {
      * @param visitor：访问器
      */
     void dfs(V begin, VertexVisitor<V> visitor);
+
+    /**
+     * 拓扑排序
+     * @return ：返回排序后的集合
+     */
+    List<V> topological();
 
     /**
      * 非递归使用这个 访问器
