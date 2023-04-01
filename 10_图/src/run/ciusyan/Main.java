@@ -5,17 +5,31 @@ import run.ciusyan.graph.ListGraph;
 
 public class Main {
     public static void main(String[] args) {
-        testDfs();
+        testBfs();
     }
 
     static void testDfs() {
         Graph<Object, Double> graph = undirectedGraph(Data.DFS_01);
-        graph.dfs(1);
+        graph.dfs(1, new ListGraph.Visitor<>() {
+            @Override
+            protected boolean visit(Object o) {
+                Integer v = (Integer) o;
+                System.out.println(v);
+                return v == 7;
+            }
+        });
     }
 
     static void testBfs() {
         Graph<Object, Double> graph = undirectedGraph(Data.BFS_01);
-        graph.bfs("A");
+        graph.bfs("A", new ListGraph.Visitor<>() {
+            @Override
+            protected boolean visit(Object o) {
+                String v = (String) o;
+                System.out.println(v);
+                return "I".equals(v);
+            }
+        });
     }
 
     static void test01() {

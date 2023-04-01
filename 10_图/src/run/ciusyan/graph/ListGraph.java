@@ -225,8 +225,15 @@ public class ListGraph<V, E> implements Graph<V, E> {
         }
     }
 
+    public static abstract class Visitor<V> {
+        // 用于记录是否需要停止递归
+        boolean stop;
+
+        protected abstract boolean visit(V v);
+    }
+
     @Override
-    public void bfs(V begin) {
+    public void bfs(V begin, Visitor<V> visitor) {
         Vertex<V, E> beginVertex = vertices.get(begin);
         if (beginVertex == null) return;
 
@@ -244,7 +251,7 @@ public class ListGraph<V, E> implements Graph<V, E> {
 
             // 访问对头元素
             Vertex<V, E> vertex = queue.poll();
-            System.out.println(vertex.value);
+            if(visitor.visit(vertex.value)) return;
 
             // 根据起点，找到它的出边
             for (Edge<V, E> edge : vertex.outEdges) {
@@ -258,16 +265,22 @@ public class ListGraph<V, E> implements Graph<V, E> {
     }
 
     @Override
-    public void dfs(V begin) {
+    public void dfs(V begin, Visitor<V> visitor) {
+        if (visitor == null) return;
+
         Vertex<V, E> beginVertex = vertices.get(begin);
         if (beginVertex == null) return;
 
-        dfs(beginVertex, new HashSet<>());
+        dfs(beginVertex, new HashSet<>(), visitor);
     }
 
-    private void dfs(Vertex<V, E> vertex, Set<Vertex<V, E>> visitedVertices) {
+    private void dfs(Vertex<V, E> vertex, Set<Vertex<V, E>> visitedVertices, Visitor<V> visitor) {
+        // 如果需要终止，就不开始返回了
+        if (visitor.stop) return;
+
         // 访问顶点
-        System.out.println(vertex.value);
+        visitor.stop = visitor.visit(vertex.value);
+
         visitedVertices.add(vertex); // 代表已经访问过了
 
         // 将能达到的终点，进行递归调用
@@ -275,7 +288,7 @@ public class ListGraph<V, E> implements Graph<V, E> {
             // 将其终点进行递归调用，但是需要查看是否已经遍历过了
             if (visitedVertices.contains(edge.to)) continue;
 
-            dfs(edge.to, visitedVertices);
+            dfs(edge.to, visitedVertices, visitor);
         }
     }
 }

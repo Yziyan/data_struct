@@ -50,12 +50,14 @@ public interface Graph<V, E> {
     /**
      * 广度优先遍历
      * @param begin：起点
+     * @param visitor：访问器
      */
-    void bfs(V begin);
+    void bfs(V begin, ListGraph.Visitor<V> visitor);
 
     /**
      * 深度优先遍历
      * @param begin：起点
+     * @param visitor：访问器
      */
-    void dfs(V begin);
+    void dfs(V begin, ListGraph.Visitor<V> visitor);
 }
