@@ -261,8 +261,7 @@ public class ListGraph<V, E> implements Graph<V, E> {
     /**
      * 非递归实现 1
      */
-    @Override
-    public void dfs(V begin, VertexVisitor<V> visitor) {
+    public void dfs1(V begin, VertexVisitor<V> visitor) {
         if (visitor == null) return;
 
         Vertex<V, E> beginVertex = vertices.get(begin);
@@ -286,6 +285,47 @@ public class ListGraph<V, E> implements Graph<V, E> {
 
             for (Edge<V, E> edge : vertex.outEdges) {
                 stack.push(edge.to);
+            }
+        }
+    }
+
+    /**
+     * 非递归实现 2
+     */
+    @Override
+    public void dfs(V begin, VertexVisitor<V> visitor) {
+        if (visitor == null) return;
+
+        Vertex<V, E> beginVertex = vertices.get(begin);
+        if (beginVertex == null) return;
+
+        // 准备一个集合，用于记录已经遍历过的节点
+        Set<Vertex<V, E>> visitedVertices = new HashSet<>();
+        // 准备一个栈
+        Stack<Vertex<V, E>> stack = new Stack<>();
+        // 直接访问起点
+        stack.push(beginVertex);
+        if (visitor.visit(beginVertex.value)) return;
+        visitedVertices.add(beginVertex); // 代表已经访问过了
+        while (!stack.isEmpty()) {
+            // 弹出栈顶元素 作为起点
+            Vertex<V, E> fromVertex = stack.pop();
+
+            // 根据出边，找到终点
+            for (Edge<V, E> edge : fromVertex.outEdges) {
+                if (visitedVertices.contains(edge.to)) continue; // 说明该终点已经被访问过了
+
+                // 直接访问终点
+                if (visitor.visit(edge.to == null ? null : edge.to.value)) return;
+                visitedVertices.add(edge.to); // 代表已经访问过了
+
+                // 将其起点和终点压入栈
+                //    压入起点，是因为上面将起点弹出来了，所以还需要压入
+                stack.push(edge.from);
+                stack.push(edge.to);
+
+                // 只需要选择一个终点即可
+                break;
             }
         }
     }

@@ -11,18 +11,16 @@ public class Main {
     static void testDfs() {
         Graph<Object, Double> graph = directedGraph(Data.DFS_02);
         graph.dfs("a", (Object o) -> {
-            String v = (String) o;
-            System.out.println(v);
-            return false;
+            System.out.println(o);
+            return o.equals("f");
         });
     }
 
     static void testBfs() {
         Graph<Object, Double> graph = undirectedGraph(Data.BFS_01);
         graph.bfs("A", (Object o) -> {
-            String v = (String) o;
-            System.out.println(v);
-            return "I".equals(v);
+            System.out.println(o);
+            return o.equals("I");
         });
     }
 
