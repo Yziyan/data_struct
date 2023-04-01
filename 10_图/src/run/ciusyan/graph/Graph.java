@@ -52,12 +52,29 @@ public interface Graph<V, E> {
      * @param begin：起点
      * @param visitor：访问器
      */
-    void bfs(V begin, ListGraph.Visitor<V> visitor);
+    void bfs(V begin, VertexVisitor<V> visitor);
 
     /**
      * 深度优先遍历
      * @param begin：起点
      * @param visitor：访问器
      */
-    void dfs(V begin, ListGraph.Visitor<V> visitor);
+    void dfs(V begin, VertexVisitor<V> visitor);
+
+    /**
+     * 非递归使用这个 访问器
+     */
+    interface VertexVisitor<V> {
+        boolean visit(V v);
+    }
+
+    /**
+     * 递归时，使用这个访问器
+     */
+    abstract class Visitor<V> {
+        // 用于记录是否需要停止递归
+        boolean stop;
+
+        protected abstract boolean visit(V v);
+    }
 }

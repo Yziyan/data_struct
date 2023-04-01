@@ -225,15 +225,8 @@ public class ListGraph<V, E> implements Graph<V, E> {
         }
     }
 
-    public static abstract class Visitor<V> {
-        // 用于记录是否需要停止递归
-        boolean stop;
-
-        protected abstract boolean visit(V v);
-    }
-
     @Override
-    public void bfs(V begin, Visitor<V> visitor) {
+    public void bfs(V begin, VertexVisitor<V> visitor) {
         Vertex<V, E> beginVertex = vertices.get(begin);
         if (beginVertex == null) return;
 
@@ -264,16 +257,45 @@ public class ListGraph<V, E> implements Graph<V, E> {
         }
     }
 
+
+    /**
+     * 非递归实现 1
+     */
     @Override
-    public void dfs(V begin, Visitor<V> visitor) {
+    public void dfs(V begin, VertexVisitor<V> visitor) {
         if (visitor == null) return;
 
         Vertex<V, E> beginVertex = vertices.get(begin);
         if (beginVertex == null) return;
 
-        dfs(beginVertex, new HashSet<>(), visitor);
+        // 准备一个集合，用于记录已经遍历过的节点
+        Set<Vertex<V, E>> visitedVertices = new HashSet<>();
+        // 准备一个栈
+        Stack<Vertex<V, E>> stack = new Stack<>();
+        stack.push(beginVertex);
+
+        while (!stack.isEmpty()) {
+            // 访问栈顶元素
+            Vertex<V, E> vertex = stack.pop();
+
+            // 但是需要判断是否已经访问过了，如果到这里已经访问过了，直接跳过
+            if (visitedVertices.contains(vertex)) continue;
+
+            if(visitor.visit(vertex.value)) return;
+            visitedVertices.add(vertex);
+
+            for (Edge<V, E> edge : vertex.outEdges) {
+                stack.push(edge.to);
+            }
+        }
     }
 
+    /**
+     * 递归实现
+     * @param vertex：起点
+     * @param visitedVertices：已经访问过的
+     * @param visitor：访问器
+     */
     private void dfs(Vertex<V, E> vertex, Set<Vertex<V, E>> visitedVertices, Visitor<V> visitor) {
         // 如果需要终止，就不开始返回了
         if (visitor.stop) return;
