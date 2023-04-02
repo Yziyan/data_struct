@@ -1,5 +1,7 @@
 package run.ciusyan.graph;
 
+import run.ciusyan.heap.MinHeap;
+
 import java.util.*;
 
 /**
@@ -219,6 +221,10 @@ public class ListGraph<V, E> implements Graph<V, E> {
             this.to = to;
         }
 
+        EdgeInfo<V, E> info() {
+            return new EdgeInfo<>(from.value, to.value, weight);
+        }
+
         @Override
         public boolean equals(Object obj) {
             if (this == obj) return true;
@@ -424,15 +430,35 @@ public class ListGraph<V, E> implements Graph<V, E> {
         // 通过迭代器，随机获取一个顶点
         Iterator<Vertex<V, E>> it = vertices.values().iterator();
         if (!it.hasNext()) return null;
-        Set<EdgeInfo<V, E>> set = new HashSet<>();
+        // 返回结果的集合
+        Set<EdgeInfo<V, E>> edgeInfos = new HashSet<>();
+        Vertex<V, E> fromVertex = it.next(); // 随机获取一个起点
+        // 代表已经切分的集合
+        Set<Vertex<V, E>> cuts = new HashSet<>();
+        // 将起点放入已切分集合中
+        cuts.add(fromVertex);
 
-        final Vertex<V, E> fromVertex = it.next(); // 随机获取一个起点
+        // 使用最小堆，传入比较器、并且原地建堆
+        MinHeap<Edge<V, E>> heap = new MinHeap<>(fromVertex.outEdges, edgeComparator);
 
-        PriorityQueue<Edge<V, E>> heap = new PriorityQueue<>(edgeComparator);
-        for (Edge<V, E> edge : fromVertex.outEdges) {
-            heap.offer(edge);
+        // 拿到所有顶点数量
+        int vertexSize = vertices.size();
+        // 至少保证堆里有元素，才加入循环，
+        // 但如果 已切分的顶点数 = 顶点总数。可以提前退出循环
+        while (!heap.isEmpty() && cuts.size() < vertexSize) {
+            // 直接删除堆顶元素，然后将其加入返回的集合中
+            Edge<V, E> minEdge = heap.remove();
+            // 代表已经切分过了，不用选这一条边了
+            if (cuts.contains(minEdge.to)) continue;
+
+            edgeInfos.add(minEdge.info()); // 加入结果集
+            cuts.add(minEdge.to); // 将此顶点，置为已切分
+
+            // 将终点作为起点，将它的出边，加入堆中，进行下一轮比较
+            heap.addAll(minEdge.to.outEdges);
         }
-        return set;
+
+        return edgeInfos;
     }
 
     /**

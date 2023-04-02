@@ -1,5 +1,6 @@
 package run.ciusyan.heap;
 
+import java.util.Collection;
 import java.util.Comparator;
 
 /**
@@ -31,7 +32,26 @@ public class MinHeap<E> {
     }
 
     public MinHeap(Comparator<E> comparator) {
-        this(null, comparator);
+        this.elements = (E[]) new Object[DEFAULT_CAPACITY];
+        this.comparator = comparator;
+    }
+
+    public MinHeap(Collection<E> collection, Comparator<E> comparator) {
+        this.comparator = comparator;
+
+        size = collection == null ? 0 : collection.size();
+        if (size == 0) {
+            this.elements = (E[]) new Object[DEFAULT_CAPACITY];
+        } else {
+            int capacity = Math.max(size, DEFAULT_CAPACITY);
+            this.elements = (E[]) new Object[capacity];
+            int i = 0;
+            for (E e : collection) {
+                elements[i++] = e;
+            }
+
+            heapify();
+        }
     }
 
     /**
@@ -87,6 +107,15 @@ public class MinHeap<E> {
         elements[size] = element;
         // 执行上滤操作，执行完记得将 size + 1（因为添加了元素）
         siftUp(size++);
+    }
+
+    /**
+     * 批量添加
+     */
+    public void addAll(Collection<E> collection) {
+        if (collection == null) return;
+
+        collection.forEach(this::add);
     }
 
     /**
