@@ -1,17 +1,18 @@
-package run.ciusyan.uf;
+package run.ciusyan.unionfind;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Objects;
 
 /**
  * 通用版 并查集 [Quick Union + 基于rank的优化 + 路径减半]
  */
-public class GenericUnionFind<V> {
+public class UnionFind<V> {
 
     // 表示所有集合
     private HashMap<V, Node<V>> sets;
 
-    public GenericUnionFind() {
+    public UnionFind() {
         this.sets = new HashMap<>();
     }
 
@@ -23,6 +24,15 @@ public class GenericUnionFind<V> {
 
         // 将其独立作为一个集合
         sets.put(v, new Node<>(v));
+    }
+
+    /**
+     * 批量初始化集合
+     */
+    public void makeSet(Collection<V> collection) {
+        if (collection == null) return;
+
+        collection.forEach(this::makeSet);
     }
 
     /**

@@ -1,6 +1,7 @@
 package run.ciusyan.graph;
 
 import run.ciusyan.heap.MinHeap;
+import run.ciusyan.unionfind.UnionFind;
 
 import java.util.*;
 
@@ -417,7 +418,7 @@ public class ListGraph<V, E> extends Graph<V, E> {
 
     @Override
     public Set<EdgeInfo<V, E>> mst() {
-        return prim();
+        return kruskal();
     }
 
     /**
@@ -462,9 +463,34 @@ public class ListGraph<V, E> extends Graph<V, E> {
      * 使用 kruskal 算法
      */
     private Set<EdgeInfo<V, E>> kruskal() {
-        Set<EdgeInfo<V, E>> set = new HashSet<>();
-        // ...
-        return set;
+        int vertexSize = vertices.size() - 1;
+        if (vertexSize <= -1) return null;
+
+        // 用于装返回值
+        Set<EdgeInfo<V, E>> edgeInfos = new HashSet<>();
+
+        // 将所有边，原地入堆
+        MinHeap<Edge<V, E>> heap = new MinHeap<>(edges, edgeComparator);
+
+        // 准备一个并查集，用于判断是否有环
+        UnionFind<Vertex<V, E>> unionFind = new UnionFind<>();
+        // 并且初始化每个顶点集（每一个顶点，作为一个单独的集合）
+        unionFind.makeSet(vertices.values());
+
+        // 至少要保证堆里有元素，如果 结果边的数量 = 顶点数 - 1，可以提前退出循环
+        while (!heap.isEmpty() && edgeInfos.size() < vertexSize) {
+            // 删除堆顶元素，取出最小的边
+            Edge<V, E> minEdge = heap.remove();
+            // 如果最小边的起点和终点都在一个顶点集中了，说明这条边连接后会成环
+            if (unionFind.isSame(minEdge.from, minEdge.to)) continue;
+
+            // 来到这里说明不会形成环，加入最小的一条边
+            edgeInfos.add(minEdge.info());
+            // 并且需要将这条边的 起点和终点并入一个顶点集
+            unionFind.union(minEdge.from, minEdge.to);
+        }
+
+        return edgeInfos;
     }
 
 }
