@@ -7,30 +7,27 @@ import java.util.*;
 /**
  * 偏向邻接表的实现
  */
-public class ListGraph<V, E> implements Graph<V, E> {
+public class ListGraph<V, E> extends Graph<V, E> {
 
     /**
      * 存储图中所有的顶点
      */
-    private Map<V, Vertex<V, E>> vertices;
+    private Map<V, Vertex<V, E>> vertices = new HashMap<>();
     /**
      * 存储图中所有的边
      */
-    private Set<Edge<V, E>> edges;
+    private Set<Edge<V, E>> edges = new HashSet<>();
 
     /**
      * 边的比较器
      */
-    private Comparator<Edge<V, E>> edgeComparator;
+    private Comparator<Edge<V, E>> edgeComparator = (e1, e2) ->
+        weightManager.compare(e1.weight, e2.weight);
 
-    public ListGraph() {
-        vertices = new HashMap<>();
-        edges = new HashSet<>();
+    public ListGraph() {}
 
-        edgeComparator = (e1, e2) -> {
-
-            return 0;
-        };
+    public ListGraph(WeightManager<E> weightManager) {
+        super(weightManager);
     }
 
     /**

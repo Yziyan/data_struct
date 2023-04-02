@@ -4,12 +4,23 @@ import run.ciusyan.graph.Graph;
 import run.ciusyan.graph.ListGraph;
 
 import java.util.List;
+import java.util.Set;
 
 public class Main {
+    static Graph.WeightManager<Double> weightManager = (w1, w2) -> w1.compareTo(w2);
+
     public static void main(String[] args) {
-        testTopo();
+        testMst();
     }
 
+
+    static void testMst() {
+        Graph<Object, Double> graph = undirectedGraph(Data.MST_02);
+        Set<Graph.EdgeInfo<Object, Double>> infos = graph.mst();
+        for (Graph.EdgeInfo<Object, Double> info : infos) {
+            System.out.println(info);
+        }
+    }
 
     static void testTopo() {
         Graph<Object, Double> graph = directedGraph(Data.TOPO);
@@ -52,7 +63,7 @@ public class Main {
      * 有向图
      */
     private static Graph<Object, Double> directedGraph(Object[][] data) {
-        Graph<Object, Double> graph = new ListGraph<>();
+        Graph<Object, Double> graph = new ListGraph<>(weightManager);
         for (Object[] edge : data) {
             if (edge.length == 1) {
                 graph.addVertex(edge[0]);
@@ -72,7 +83,7 @@ public class Main {
      * @return
      */
     private static Graph<Object, Double> undirectedGraph(Object[][] data) {
-        Graph<Object, Double> graph = new ListGraph<>();
+        Graph<Object, Double> graph = new ListGraph<>(weightManager);
         for (Object[] edge : data) {
             if (edge.length == 1) {
                 graph.addVertex(edge[0]);

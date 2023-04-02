@@ -8,32 +8,41 @@ import java.util.Set;
  * @param <V>：顶点存储的元素类型
  * @param <E>：边存储的权值类型
  */
-public interface Graph<V, E> {
+public abstract class Graph<V, E> {
+
+    protected WeightManager<E> weightManager;
+
+    public Graph() {}
+
+    public Graph(WeightManager<E> weightManager) {
+        this.weightManager = weightManager;
+    }
+
     /**
      * 顶点的数量
      */
-    int verticesSize();
+    public abstract int verticesSize();
 
     /**
      * 边的数量
      */
-    int edgeSize();
+    public abstract int edgeSize();
 
     /**
      * 添加一个顶点
      * @param v：顶点存储的元素
      */
-    void addVertex(V v);
+    public abstract void addVertex(V v);
 
     /**
      * 删除顶点
      */
-    void removeVertex(V v);
+    public abstract void removeVertex(V v);
 
     /**
      * 添加边，无权值
      */
-    void addEdge(V fromV, V toV);
+    public abstract void addEdge(V fromV, V toV);
 
     /**
      * 添加边
@@ -41,52 +50,52 @@ public interface Graph<V, E> {
      * @param toV：到哪个顶点
      * @param weight：权值
      */
-    void addEdge(V fromV, V toV, E weight);
+    public abstract void addEdge(V fromV, V toV, E weight);
 
     /**
      * 删除边
      * @param fromV：从哪个顶点出发
      * @param toV：到哪个顶点
      */
-    void removeEdge(V fromV, V toV);
+    public abstract void removeEdge(V fromV, V toV);
 
     /**
      * 广度优先遍历
      * @param begin：起点
      * @param visitor：访问器
      */
-    void bfs(V begin, VertexVisitor<V> visitor);
+    public abstract void bfs(V begin, VertexVisitor<V> visitor);
 
     /**
      * 深度优先遍历
      * @param begin：起点
      * @param visitor：访问器
      */
-    void dfs(V begin, VertexVisitor<V> visitor);
+    public abstract void dfs(V begin, VertexVisitor<V> visitor);
 
     /**
      * 拓扑排序
      * @return ：返回排序后的集合
      */
-    List<V> topological();
+    public abstract List<V> topological();
 
     /**
      * 获取一棵最小生成树
      * @return ：最小生成树包含的边
      */
-    Set<EdgeInfo<V, E>> mst();
+    public abstract Set<EdgeInfo<V, E>> mst();
 
     /**
      * 非递归使用这个 访问器
      */
-    interface VertexVisitor<V> {
+    public interface VertexVisitor<V> {
         boolean visit(V v);
     }
 
     /**
      * 递归时，使用这个访问器
      */
-    abstract class Visitor<V> {
+    public abstract class Visitor<V> {
         // 用于记录是否需要停止递归
         boolean stop;
 
@@ -96,7 +105,7 @@ public interface Graph<V, E> {
     /**
      * 边的信息，mst 时使用
      */
-    class EdgeInfo<V, E> {
+    public static class EdgeInfo<V, E> {
         // 起点
         V from;
         // 终点
@@ -118,5 +127,14 @@ public interface Graph<V, E> {
                 ", weight=" + weight +
                 '}';
         }
+    }
+
+    public interface WeightManager<E> {
+        /**
+         * 比较权值大小
+         */
+        int compare(E w1, E w2);
+
+        // ...
     }
 }
