@@ -10,11 +10,26 @@ public class ListGraph<V, E> implements Graph<V, E> {
     /**
      * 存储图中所有的顶点
      */
-    private Map<V, Vertex<V, E>> vertices = new HashMap<>();
+    private Map<V, Vertex<V, E>> vertices;
     /**
      * 存储图中所有的边
      */
-    private Set<Edge<V, E>> edges = new HashSet<>();
+    private Set<Edge<V, E>> edges;
+
+    /**
+     * 边的比较器
+     */
+    private Comparator<Edge<V, E>> edgeComparator;
+
+    public ListGraph() {
+        vertices = new HashMap<>();
+        edges = new HashSet<>();
+
+        edgeComparator = (e1, e2) -> {
+
+            return 0;
+        };
+    }
 
     /**
      * 用于简单测试结果
@@ -396,4 +411,37 @@ public class ListGraph<V, E> implements Graph<V, E> {
 
         return topoResult;
     }
+
+    @Override
+    public Set<EdgeInfo<V, E>> mst() {
+        return prim();
+    }
+
+    /**
+     * 使用 prim 算法
+     */
+    private Set<EdgeInfo<V, E>> prim() {
+        // 通过迭代器，随机获取一个顶点
+        Iterator<Vertex<V, E>> it = vertices.values().iterator();
+        if (!it.hasNext()) return null;
+        Set<EdgeInfo<V, E>> set = new HashSet<>();
+
+        final Vertex<V, E> fromVertex = it.next(); // 随机获取一个起点
+
+        PriorityQueue<Edge<V, E>> heap = new PriorityQueue<>(edgeComparator);
+        for (Edge<V, E> edge : fromVertex.outEdges) {
+            heap.offer(edge);
+        }
+        return set;
+    }
+
+    /**
+     * 使用 kruskal 算法
+     */
+    private Set<EdgeInfo<V, E>> kruskal() {
+        Set<EdgeInfo<V, E>> set = new HashSet<>();
+        // ...
+        return set;
+    }
+
 }

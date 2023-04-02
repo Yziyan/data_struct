@@ -1,6 +1,7 @@
 package run.ciusyan.graph;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * 图的接口
@@ -70,6 +71,12 @@ public interface Graph<V, E> {
     List<V> topological();
 
     /**
+     * 获取一棵最小生成树
+     * @return ：最小生成树包含的边
+     */
+    Set<EdgeInfo<V, E>> mst();
+
+    /**
      * 非递归使用这个 访问器
      */
     interface VertexVisitor<V> {
@@ -84,5 +91,32 @@ public interface Graph<V, E> {
         boolean stop;
 
         protected abstract boolean visit(V v);
+    }
+
+    /**
+     * 边的信息，mst 时使用
+     */
+    class EdgeInfo<V, E> {
+        // 起点
+        V from;
+        // 终点
+        V to;
+        // 权值
+        E weight;
+
+        public EdgeInfo(V from, V to, E weight) {
+            this.from = from;
+            this.to = to;
+            this.weight = weight;
+        }
+
+        @Override
+        public String toString() {
+            return "EdgeInfo{" +
+                "from=" + from +
+                ", to=" + to +
+                ", weight=" + weight +
+                '}';
+        }
     }
 }
