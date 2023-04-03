@@ -4,15 +4,32 @@ import run.ciusyan.graph.Graph;
 import run.ciusyan.graph.ListGraph;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class Main {
-    static Graph.WeightManager<Double> weightManager = (w1, w2) -> w1.compareTo(w2);
+    static Graph.WeightManager<Double> weightManager = new Graph.WeightManager<>() {
+        @Override
+        public int compare(Double w1, Double w2) {
+            return w1.compareTo(w2);
+        }
+
+        @Override
+        public Double add(Double w1, Double w2) {
+            return w1 + w2;
+        }
+    };
 
     public static void main(String[] args) {
-        testMst();
+        testSp();
     }
 
+    static void testSp() {
+        Graph<Object, Double> graph = undirectedGraph(Data.SP);
+        Map<Object, Double> paths = graph.shortPath("A");
+
+        System.out.println(paths);
+    }
 
     static void testMst() {
         Graph<Object, Double> graph = undirectedGraph(Data.MST_02);

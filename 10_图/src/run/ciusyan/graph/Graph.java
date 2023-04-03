@@ -1,6 +1,7 @@
 package run.ciusyan.graph;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -86,6 +87,13 @@ public abstract class Graph<V, E> {
     public abstract Set<EdgeInfo<V, E>> mst();
 
     /**
+     * 求从 src 开始的源点，到其他点的最短路径
+     * @param src：源点
+     * @return <"B", 10>，<"C", 30> ...
+     */
+    public abstract Map<V, E> shortPath(V src);
+
+    /**
      * 非递归使用这个 访问器
      */
     public interface VertexVisitor<V> {
@@ -135,6 +143,10 @@ public abstract class Graph<V, E> {
          */
         int compare(E w1, E w2);
 
+        /**
+         * 计算 w1 + w2
+         */
+        E add(E w1, E w2);
         // ...
     }
 }

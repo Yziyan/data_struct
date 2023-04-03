@@ -421,6 +421,79 @@ public class ListGraph<V, E> extends Graph<V, E> {
         return kruskal();
     }
 
+    @Override
+    public Map<V, E> shortPath(V src) {
+        Vertex<V, E> srcVertex = vertices.get(src);
+        if (srcVertex == null) return null;
+
+        // 返回结果
+        Map<V, E> computedPath = new HashMap<>();
+        // 用于记录中间结果
+        Map<Vertex<V, E>, E> paths = new HashMap<>();
+
+        // 初始化 paths
+        for (Edge<V, E> edge : srcVertex.outEdges) {
+            // 从源点到每一个终点的距离
+            paths.put(edge.to, edge.weight);
+        }
+
+        while (!paths.isEmpty()) {
+
+            // 获取 paths 中的最小值
+            Map.Entry<Vertex<V, E>, E> minPath = getMinPath(paths);
+            Vertex<V, E> vertex = minPath.getKey();
+
+            // 将此顶点在 paths 中删除
+            E weight = paths.remove(vertex);
+            // 添加到结果中
+            computedPath.put(vertex.value, weight);
+
+            // 对刚算出最短路径的顶点，进行松弛操作
+            for (Edge<V, E> edge : vertex.outEdges) {
+                // 如果已经得到结果了，就别往计算了
+                // 或者，如果这个点，是源点，也别往下走了
+                if (computedPath.containsKey(edge.to.value) || edge.to.equals(srcVertex)) continue;
+
+                // (srcVertex 到 vertex) + (vertex 到 vertex.to)
+                E newWeight = weightManager.add(weight, edge.weight);
+
+                // 将新权值与，旧权值比较，如果新路径还要短，就更新路径值
+                // 当然，如果以前都没有路，说明获取出来是空的，那么现在就是最短的
+                E oldWeight = paths.get(edge.to);
+                if (oldWeight == null || weightManager.compare(newWeight, oldWeight) < 0) {
+                    // 来到这里说明，有更短的路径，更新路径
+                    paths.put(edge.to, newWeight);
+                }
+            }
+        }
+
+        return computedPath;
+    }
+
+    /**
+     * 获取最小路径
+     * @param paths：所有顶点的路径
+     * @return ：最小路径的 键值对
+     */
+    private Map.Entry<Vertex<V, E>, E> getMinPath(Map<Vertex<V, E>, E> paths) {
+
+        // 使用迭代器遍历
+        Iterator<Map.Entry<Vertex<V, E>, E>> it = paths.entrySet().iterator();
+        // 因为上面会判断，这里大胆的取
+        Map.Entry<Vertex<V, E>, E> minPath = it.next();
+
+        // 遍历，找出最小值
+        while (it.hasNext()) {
+            Map.Entry<Vertex<V, E>, E> next = it.next();
+            if (weightManager.compare(next.getValue(), minPath.getValue()) < 0) {
+                // 说明比 最小的 还要小
+                minPath = next;
+            }
+        }
+
+        return minPath;
+    }
+
     /**
      * 使用 prim 算法
      */
