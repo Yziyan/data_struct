@@ -422,52 +422,85 @@ public class ListGraph<V, E> extends Graph<V, E> {
     }
 
     @Override
-    public Map<V, E> shortPath(V src) {
+    public Map<V, PathInfo<V, E>> shortPath(V src) {
         Vertex<V, E> srcVertex = vertices.get(src);
         if (srcVertex == null) return null;
 
         // 返回结果
-        Map<V, E> computedPath = new HashMap<>();
+        Map<V, PathInfo<V, E>> computedPath = new HashMap<>();
         // 用于记录中间结果
-        Map<Vertex<V, E>, E> paths = new HashMap<>();
+        Map<Vertex<V, E>, PathInfo<V, E>> paths = new HashMap<>();
 
         // 初始化 paths
         for (Edge<V, E> edge : srcVertex.outEdges) {
             // 从源点到每一个终点的距离
-            paths.put(edge.to, edge.weight);
+            PathInfo<V, E> pathInfo = new PathInfo<>();
+            pathInfo.weight = edge.weight;
+            pathInfo.edgeInfos.add(edge.info());
+            paths.put(edge.to, pathInfo);
         }
 
         while (!paths.isEmpty()) {
 
             // 获取 paths 中的最小值
-            Map.Entry<Vertex<V, E>, E> minPath = getMinPath(paths);
+            Map.Entry<Vertex<V, E>, PathInfo<V, E>> minPath = getMinPath(paths);
             Vertex<V, E> vertex = minPath.getKey();
 
             // 将此顶点在 paths 中删除
-            E weight = paths.remove(vertex);
+            PathInfo<V, E> pathInfo = paths.remove(vertex);
             // 添加到结果中
-            computedPath.put(vertex.value, weight);
+            computedPath.put(vertex.value, pathInfo);
 
             // 对刚算出最短路径的顶点，进行松弛操作
             for (Edge<V, E> edge : vertex.outEdges) {
                 // 如果已经得到结果了，就别往计算了
                 // 或者，如果这个点，是源点，也别往下走了
-                if (computedPath.containsKey(edge.to.value) || edge.to.equals(srcVertex)) continue;
+                if (computedPath.containsKey(edge.to.value)) continue;
 
-                // (srcVertex 到 vertex) + (vertex 到 vertex.to)
-                E newWeight = weightManager.add(weight, edge.weight);
-
-                // 将新权值与，旧权值比较，如果新路径还要短，就更新路径值
-                // 当然，如果以前都没有路，说明获取出来是空的，那么现在就是最短的
-                E oldWeight = paths.get(edge.to);
-                if (oldWeight == null || weightManager.compare(newWeight, oldWeight) < 0) {
-                    // 来到这里说明，有更短的路径，更新路径
-                    paths.put(edge.to, newWeight);
-                }
+                // 松弛操作
+                relaxForDijkstra(edge, pathInfo, paths);
             }
         }
 
+        // 不管结果种有没有，直接删除源点
+        computedPath.remove(src);
+
         return computedPath;
+    }
+
+    /**
+     * 松弛操作
+     * @param edge：对哪条边进行松弛操作
+     * @param fromPath：刚被提起来小石子，这条边的路径信息
+     * @param paths：还未被确定的最短路径（未被提起来的小石子）
+     */
+    private void relaxForDijkstra(Edge<V, E> edge, PathInfo<V, E> fromPath, Map<Vertex<V, E>, PathInfo<V, E>> paths) {
+
+        // (srcVertex 到 vertex) + (vertex 到 vertex.to)
+        E newWeight = weightManager.add(fromPath.weight, edge.weight);
+
+        // 将新权值与，旧权值比较，如果新路径还要短，就更新路径值
+        // 当然，如果以前都没有路，说明获取出来是空的，那么现在就是最短的
+        PathInfo<V, E> oldInfo = paths.get(edge.to);
+        if (oldInfo != null && weightManager.compare(newWeight, oldInfo.weight) >= 0) return;
+
+        // 来到这里说明，有更短的路径，更新路径
+        if (oldInfo == null) {
+            // 说明以前，没有路径存在，刚有一条路，得初始化一下
+            oldInfo = new PathInfo<>();
+            paths.put(edge.to, oldInfo);
+        } else {
+            // 如果以前有路径，将其路径清空，因为要更新路径了
+            oldInfo.edgeInfos.clear();
+        }
+
+        // 更新 路径 和 长度
+        // 将 源点到，此顶点的路径先添加进去
+        // fromPath.edgeInfos ：是刚被提起来的小石子的最短路径，
+        oldInfo.edgeInfos.addAll(fromPath.edgeInfos);
+        // 载加这条新的路径
+        oldInfo.edgeInfos.add(edge.info());
+        oldInfo.weight = newWeight;
     }
 
     /**
@@ -475,17 +508,17 @@ public class ListGraph<V, E> extends Graph<V, E> {
      * @param paths：所有顶点的路径
      * @return ：最小路径的 键值对
      */
-    private Map.Entry<Vertex<V, E>, E> getMinPath(Map<Vertex<V, E>, E> paths) {
+    private Map.Entry<Vertex<V, E>, PathInfo<V, E>> getMinPath(Map<Vertex<V, E>, PathInfo<V, E>> paths) {
 
         // 使用迭代器遍历
-        Iterator<Map.Entry<Vertex<V, E>, E>> it = paths.entrySet().iterator();
+        Iterator<Map.Entry<Vertex<V, E>, PathInfo<V, E>>> it = paths.entrySet().iterator();
         // 因为上面会判断，这里大胆的取
-        Map.Entry<Vertex<V, E>, E> minPath = it.next();
+        Map.Entry<Vertex<V, E>, PathInfo<V, E>> minPath = it.next();
 
         // 遍历，找出最小值
         while (it.hasNext()) {
-            Map.Entry<Vertex<V, E>, E> next = it.next();
-            if (weightManager.compare(next.getValue(), minPath.getValue()) < 0) {
+            Map.Entry<Vertex<V, E>, PathInfo<V, E>> next = it.next();
+            if (weightManager.compare(next.getValue().weight, minPath.getValue().weight) < 0) {
                 // 说明比 最小的 还要小
                 minPath = next;
             }
@@ -565,5 +598,83 @@ public class ListGraph<V, E> extends Graph<V, E> {
 
         return edgeInfos;
     }
+
+
+    // 简单版 Dijisktra
+//    public Map<V, E> shortPath(V src) {
+//        Vertex<V, E> srcVertex = vertices.get(src);
+//        if (srcVertex == null) return null;
+//
+//        // 返回结果
+//        Map<V, E> computedPath = new HashMap<>();
+//        // 用于记录中间结果
+//        Map<Vertex<V, E>, E> paths = new HashMap<>();
+//
+//        // 初始化 paths
+//        for (Edge<V, E> edge : srcVertex.outEdges) {
+//            // 从源点到每一个终点的距离
+//            paths.put(edge.to, edge.weight);
+//        }
+//
+//        while (!paths.isEmpty()) {
+//
+//            // 获取 paths 中的最小值
+//            Map.Entry<Vertex<V, E>, E> minPath = getMinPath(paths);
+//            Vertex<V, E> vertex = minPath.getKey();
+//
+//            // 将此顶点在 paths 中删除
+//            E weight = paths.remove(vertex);
+//            // 添加到结果中
+//            computedPath.put(vertex.value, weight);
+//
+//            // 对刚算出最短路径的顶点，进行松弛操作
+//            for (Edge<V, E> edge : vertex.outEdges) {
+//                // 如果已经得到结果了，就别往计算了
+//                // 或者，如果这个点，是源点，也别往下走了
+//                if (computedPath.containsKey(edge.to.value)) continue;
+//
+//                // (srcVertex 到 vertex) + (vertex 到 vertex.to)
+//                E newWeight = weightManager.add(weight, edge.weight);
+//
+//                // 将新权值与，旧权值比较，如果新路径还要短，就更新路径值
+//                // 当然，如果以前都没有路，说明获取出来是空的，那么现在就是最短的
+//                E oldWeight = paths.get(edge.to);
+//                if (oldWeight == null || weightManager.compare(newWeight, oldWeight) < 0) {
+//                    // 来到这里说明，有更短的路径，更新路径
+//                    paths.put(edge.to, newWeight);
+//                }
+//            }
+//        }
+//
+//        // 不管有没有将源点加入，都删除掉
+//        computedPath.remove(src);
+//
+//        return computedPath;
+//    }
+//
+//    /**
+//     * 获取最小路径
+//     * @param paths：所有顶点的路径
+//     * @return ：最小路径的 键值对
+//     */
+//    private Map.Entry<Vertex<V, E>, E> getMinPath(Map<Vertex<V, E>, E> paths) {
+//
+//        // 使用迭代器遍历
+//        Iterator<Map.Entry<Vertex<V, E>, E>> it = paths.entrySet().iterator();
+//        // 因为上面会判断，这里大胆的取
+//        Map.Entry<Vertex<V, E>, E> minPath = it.next();
+//
+//        // 遍历，找出最小值
+//        while (it.hasNext()) {
+//            Map.Entry<Vertex<V, E>, E> next = it.next();
+//            if (weightManager.compare(next.getValue(), minPath.getValue()) < 0) {
+//                // 说明比 最小的 还要小
+//                minPath = next;
+//            }
+//        }
+//
+//        return minPath;
+//    }
+
 
 }

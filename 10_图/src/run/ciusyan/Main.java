@@ -26,9 +26,9 @@ public class Main {
 
     static void testSp() {
         Graph<Object, Double> graph = undirectedGraph(Data.SP);
-        Map<Object, Double> paths = graph.shortPath("A");
+        Map<Object, Graph.PathInfo<Object, Double>> path = graph.shortPath("A");
 
-        System.out.println(paths);
+        path.forEach((k, v) -> System.out.println(k + "_" + v));
     }
 
     static void testMst() {

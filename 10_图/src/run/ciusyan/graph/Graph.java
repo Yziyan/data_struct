@@ -1,5 +1,6 @@
 package run.ciusyan.graph;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -89,9 +90,29 @@ public abstract class Graph<V, E> {
     /**
      * 求从 src 开始的源点，到其他点的最短路径
      * @param src：源点
-     * @return <"B", 10>，<"C", 30> ...
+     * @return <"B", PathInfo>，<"C", PathInfo> ...
      */
-    public abstract Map<V, E> shortPath(V src);
+    public abstract Map<V, PathInfo<V, E>> shortPath(V src);
+
+    // public abstract Map<V, E> shortPath(V src);
+
+    /**
+     * 路径信息
+     */
+    public static class PathInfo<V, E> {
+        // 最短路径的总权值
+        protected E weight;
+        // 路径信息
+        protected List<EdgeInfo<V, E>> edgeInfos = new LinkedList<>();
+
+        @Override
+        public String toString() {
+            return "PathInfo{" +
+                "weight=" + weight +
+                ", edgeInfos=" + edgeInfos +
+                '}';
+        }
+    }
 
     /**
      * 非递归使用这个 访问器
@@ -115,11 +136,11 @@ public abstract class Graph<V, E> {
      */
     public static class EdgeInfo<V, E> {
         // 起点
-        V from;
+        protected V from;
         // 终点
-        V to;
+        protected V to;
         // 权值
-        E weight;
+        protected E weight;
 
         public EdgeInfo(V from, V to, E weight) {
             this.from = from;
