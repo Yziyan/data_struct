@@ -30,7 +30,7 @@ public class Main {
     }
 
     static void testSp() {
-        Graph<Object, Double> graph = directedGraph(Data.NEGATIVE_WEIGHT1);
+        Graph<Object, Double> graph = directedGraph(Data.SP);
         Map<Object, Graph.PathInfo<Object, Double>> path = graph.shortPath("A");
 
         if (path == null) return;

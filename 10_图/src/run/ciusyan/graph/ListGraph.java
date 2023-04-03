@@ -423,7 +423,7 @@ public class ListGraph<V, E> extends Graph<V, E> {
 
     @Override
     public Map<V, PathInfo<V, E>> shortPath(V src) {
-        return bellmanFord(src);
+        return dijkstra(src);
     }
 
     /**
@@ -455,6 +455,7 @@ public class ListGraph<V, E> extends Graph<V, E> {
                 // 代表还没有路，能够从源点到达此条边
                 if (fromPath == null) continue;
 
+                // 松弛操作
                 relaxForBF(edge, fromPath, computedPath);
             }
         }
@@ -490,14 +491,19 @@ public class ListGraph<V, E> extends Graph<V, E> {
         // 用于记录中间结果
         Map<Vertex<V, E>, PathInfo<V, E>> paths = new HashMap<>();
 
-        // 初始化 paths
-        for (Edge<V, E> edge : srcVertex.outEdges) {
-            // 从源点到每一个终点的距离
-            PathInfo<V, E> pathInfo = new PathInfo<>();
-            pathInfo.weight = edge.weight;
-            pathInfo.edgeInfos.add(edge.info());
-            paths.put(edge.to, pathInfo);
-        }
+        // 默认将源点放入，
+        PathInfo<V, E> srcPathInfo = new PathInfo<>();
+        srcPathInfo.weight = weightManager.zreo();
+        paths.put(srcVertex, srcPathInfo);
+
+        // 初始化 paths，这个操作，可以交给下面的代码去做，当作松弛即可
+//        for (Edge<V, E> edge : srcVertex.outEdges) {
+//            // 从源点到每一个终点的距离
+//            PathInfo<V, E> pathInfo = new PathInfo<>();
+//            pathInfo.weight = edge.weight;
+//            pathInfo.edgeInfos.add(edge.info());
+//            paths.put(edge.to, pathInfo);
+//        }
 
         while (!paths.isEmpty()) {
 
