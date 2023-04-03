@@ -423,6 +423,65 @@ public class ListGraph<V, E> extends Graph<V, E> {
 
     @Override
     public Map<V, PathInfo<V, E>> shortPath(V src) {
+        return bellmanFord(src);
+    }
+
+    /**
+     * 使用 Bellman-Ford 算法求出最短路径
+     */
+    private Map<V, PathInfo<V, E>> bellmanFord(V src) {
+        Vertex<V, E> srcVertex = vertices.get(src);
+        if (srcVertex == null) return null;
+
+        // 返回结果
+        Map<V, PathInfo<V, E>> computedPath = new HashMap<>();
+        // 需要对 computedPath 进行初始化，否则之后加入循环时，会一直获取不到，fromPath
+        // 至少要将源点加入进去
+        PathInfo<V, E> srcPathInfo = new PathInfo<>();
+        // 因为这里是泛型，需要外界告诉我们，它的零值是什么，所以又可以在权值管理器增加方法
+        srcPathInfo.weight = weightManager.zreo();
+        // 这里不需要添加一条边进去了，只要有权值即可
+        // 要不然之后的路径会变成 源点 - 源点 - 其他点 - ...
+        computedPath.put(src, srcPathInfo);
+
+        // 进行 V - 1 次，松弛操作
+        int count = vertices.size() - 1;
+        for (int i = 0; i < count; i++) {
+
+            // 尝试对所有边进行松弛操作
+            for (Edge<V, E> edge : edges) {
+                // 尝试获取源点，到起点的最短路径
+                PathInfo<V, E> fromPath = computedPath.get(edge.from.value);
+                // 代表还没有路，能够从源点到达此条边
+                if (fromPath == null) continue;
+
+                relaxForBF(edge, fromPath, computedPath);
+            }
+        }
+
+        // 判断是否有负权环
+        for (Edge<V, E> edge : edges) {
+            // 尝试获取源点，到起点的最短路径
+            PathInfo<V, E> fromPath = computedPath.get(edge.from.value);
+            // 代表还没有路，能够从源点到达此条边
+            if (fromPath == null) continue;
+            if (relaxForBF(edge, fromPath, computedPath)) {
+                System.out.println("有负权环");
+                return null;
+            }
+        }
+
+        // 计算出所有点的最短路径后，将其源点从集合中删除
+        computedPath.remove(src);
+
+        return computedPath;
+    }
+
+
+    /**
+     * 使用 Dijkstra 算法求出最短路径
+     */
+    private Map<V, PathInfo<V,E>> dijkstra(V src) {
         Vertex<V, E> srcVertex = vertices.get(src);
         if (srcVertex == null) return null;
 
@@ -469,7 +528,36 @@ public class ListGraph<V, E> extends Graph<V, E> {
     }
 
     /**
-     * 松弛操作
+     * 松弛操作 —— 对于 Bellman-Ford 而言
+     * @param edge：对哪条边进行松弛操作
+     * @param fromPath：那条边的路径信息
+     * @param paths：还未被确定的最短路径（未被提起来的小石子）
+     * @return ：是否松弛成功，用于查看图是否有负权环
+     */
+    private boolean relaxForBF(Edge<V, E> edge, PathInfo<V, E> fromPath, Map<V, PathInfo<V, E>> paths) {
+        // (srcVertex 到 vertex) + (vertex 到 vertex.to)
+        // 也就是现在路径上的最小值 + 这条边的路径长度
+        E newWeight = weightManager.add(fromPath.weight, edge.weight);
+
+        PathInfo<V, E> oldInfo = paths.get(edge.to.value);
+        if (oldInfo != null && weightManager.compare(newWeight, oldInfo.weight) >= 0) return false;
+
+        if (oldInfo == null) {
+            oldInfo = new PathInfo<>();
+            paths.put(edge.to.value, oldInfo);
+        } else {
+            oldInfo.edgeInfos.clear();
+        }
+
+        oldInfo.edgeInfos.addAll(fromPath.edgeInfos);
+        oldInfo.edgeInfos.add(edge.info());
+        oldInfo.weight = newWeight;
+
+        return true;
+    }
+
+    /**
+     * 松弛操作 —— 对于 Dijkstra 而言
      * @param edge：对哪条边进行松弛操作
      * @param fromPath：刚被提起来小石子，这条边的路径信息
      * @param paths：还未被确定的最短路径（未被提起来的小石子）

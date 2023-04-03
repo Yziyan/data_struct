@@ -168,6 +168,11 @@ public abstract class Graph<V, E> {
          * 计算 w1 + w2
          */
         E add(E w1, E w2);
+
+        /**
+         * 权值的零值
+         */
+        E zreo();
         // ...
     }
 }

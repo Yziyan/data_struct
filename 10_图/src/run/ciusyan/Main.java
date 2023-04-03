@@ -18,6 +18,11 @@ public class Main {
         public Double add(Double w1, Double w2) {
             return w1 + w2;
         }
+
+        @Override
+        public Double zreo() {
+            return 0.0;
+        }
     };
 
     public static void main(String[] args) {
@@ -25,10 +30,11 @@ public class Main {
     }
 
     static void testSp() {
-        Graph<Object, Double> graph = undirectedGraph(Data.SP);
+        Graph<Object, Double> graph = directedGraph(Data.NEGATIVE_WEIGHT1);
         Map<Object, Graph.PathInfo<Object, Double>> path = graph.shortPath("A");
 
-        path.forEach((k, v) -> System.out.println(k + "_" + v));
+        if (path == null) return;
+        path.forEach((k, v) -> System.out.println(k + " - " + v));
     }
 
     static void testMst() {
