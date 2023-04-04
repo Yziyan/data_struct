@@ -26,7 +26,20 @@ public class Main {
     };
 
     public static void main(String[] args) {
-        testSp();
+        testMultiSp();
+    }
+
+    static void testMultiSp() {
+        Graph<Object, Double> graph = directedGraph(Data.SP);
+        Map<Object, Map<Object, Graph.PathInfo<Object, Double>>> paths = graph.shortPath();
+
+        paths.forEach((src, vs) -> {
+            System.out.println(src + "-----------------");
+
+            vs.forEach((dist, v) -> {
+                System.out.println(dist + " --- " + v);
+            });
+        });
     }
 
     static void testSp() {

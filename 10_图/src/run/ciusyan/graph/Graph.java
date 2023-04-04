@@ -94,6 +94,13 @@ public abstract class Graph<V, E> {
      */
     public abstract Map<V, PathInfo<V, E>> shortPath(V src);
 
+
+    /**
+     * 求所有可能到达点，之间，它们的相互路径
+     * @return ： "A" -> <"B", PathInfo> "A" -> <"C", PathInfo> "C" -> <"D", PathInfo> ...
+     */
+    public abstract Map<V, Map<V, PathInfo<V, E>>> shortPath();
+
     // public abstract Map<V, E> shortPath(V src);
 
     /**

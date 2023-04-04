@@ -533,6 +533,90 @@ public class ListGraph<V, E> extends Graph<V, E> {
         return computedPath;
     }
 
+    @Override
+    public Map<V, Map<V, PathInfo<V, E>>> shortPath() {
+        // 返回结果
+        Map<V, Map<V, PathInfo<V, E>>> paths = new HashMap<>();
+
+        // 初始化 paths，将所有的边，from -> to 默认当作最短路径
+        edges.forEach((edge -> {
+            Map<V, PathInfo<V, E>> fromPaths = paths.get(edge.from.value);
+
+            // 可能为空
+            if (fromPaths == null) {
+                fromPaths = new HashMap<>();
+            }
+
+            // 能来到这里，fromPaths 肯定不为空了，
+            // 初始化，fromPath，将其放入 fromPaths 中
+            PathInfo<V, E> fromPath = new PathInfo<>();
+            fromPath.weight = edge.weight;
+            fromPath.edgeInfos.add(edge.info());
+            fromPaths.put(edge.to.value, fromPath);
+
+            // 初始化 fromPaths，将其放入 paths 中
+            paths.put(edge.from.value, fromPaths);
+        }));
+
+        // 三层遍历，不断寻找某两个顶点之间的最短路径
+        // 1 -> 3 or 1 -> 2 -> 3
+        //      只能将 2 放最前面，否则可能会有问题
+        vertices.forEach((v2, vertex1) -> {
+            vertices.forEach((v1, vertex2) -> {
+                vertices.forEach((v3, vertex3) -> {
+                    // 如果，它们之间任意两个相等，说明是 源点 -> 源点，没必要执行
+                    if (v1.equals(v2) || v2.equals(v3) || v1.equals(v3)) return;
+
+                    // 获取 1->2 的路径信息，可能没有
+                    PathInfo<V, E> path12 = getPath(v1, v2, paths);
+                    if (path12 == null) return;
+
+                    // 获取 2->3 的路径信息，可能没有
+                    PathInfo<V, E> path23 = getPath(v2, v3, paths);
+                    if (path23 == null) return;
+
+                    // 获取 1->3 的路径信息，可能没有
+                    PathInfo<V, E> path13 = getPath(v1, v3, paths);
+
+                    // dist(1, 2) + dist(2, 3)
+                    E newWeight = weightManager.add(path12.weight, path23.weight);
+
+                    // 如果 13 之间有路，并且新权值没有旧权值小，直接跳过此次循环
+                    if (path13 != null && weightManager.compare(newWeight, path13.weight) >= 0) return;
+
+                    if (path13 == null) {
+                        // 说明之前没有路，需要添加一条路
+                        path13 = new PathInfo<>();
+                        // 给 path13 之间，增加一条路
+                        paths.get(v1).put(v3, path13);
+                    } else { // 说明以前有路，但是现在的路更短，清空以前的路径
+                        path13.edgeInfos.clear();
+                    }
+
+                    // 更新权值和路径，以前的路是 1->3 ，变为 1->2->3
+                    path13.edgeInfos.addAll(path12.edgeInfos);
+                    path13.edgeInfos.addAll(path23.edgeInfos);
+                    path13.weight = newWeight;
+                });
+            });
+        });
+
+        return paths;
+    }
+
+    /**
+     * 获取路径
+     * @param from：起点
+     * @param to：终点
+     * @param paths：所有路径信息
+     * @return ：从 from -> to 的路径信息
+     */
+    private PathInfo<V, E> getPath(V from, V to, Map<V, Map<V, PathInfo<V, E>>> paths) {
+        Map<V, PathInfo<V, E>> fromPath = paths.get(from);
+
+        return fromPath == null ? null : fromPath.get(to);
+    }
+
     /**
      * 松弛操作 —— 对于 Bellman-Ford 而言
      * @param edge：对哪条边进行松弛操作
