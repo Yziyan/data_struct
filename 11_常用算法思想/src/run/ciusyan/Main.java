@@ -2,11 +2,17 @@ package run.ciusyan;
 
 import run.ciusyan.recursion.ClimbStairs;
 import run.ciusyan.recursion.Fib;
+import run.ciusyan.recursion.Hanoi;
 import run.ciusyan.tools.Times;
 
 public class Main {
     public static void main(String[] args) {
-        testClimbStairs();
+        testHanoi();
+    }
+
+    static void testHanoi() {
+        Hanoi hanoi = new Hanoi();
+        hanoi.hanoi(3, "A", "B", "C");
     }
 
     static void testClimbStairs() {
