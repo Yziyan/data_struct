@@ -1,6 +1,7 @@
 package run.ciusyan;
 
 import run.ciusyan.baktraking.NQueens;
+import run.ciusyan.baktraking.NQueens2;
 import run.ciusyan.recursion.ClimbStairs;
 import run.ciusyan.recursion.Fib;
 import run.ciusyan.recursion.Hanoi;
@@ -14,7 +15,7 @@ public class Main {
     }
 
     static void testNQueens() {
-        NQueens queens = new NQueens(4);
+        NQueens2 queens = new NQueens2(4);
 
         System.out.println(queens.placeQueues());
         List<List<String>> result = queens.getResult();

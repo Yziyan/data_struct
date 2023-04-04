@@ -80,7 +80,10 @@ public class NQueens {
 
         for (int i = 0; i < row; i++) {
             // 说明 (i, col)，已经有皇后了（col 列）
-            if (cols[i] == col) return false;
+            if (cols[i] == col) {
+                System.out.println("(" + row + ", " + col + ") = false");
+                return false;
+            }
 
             // 再判断斜线有无皇后
             // 因为是对角线，也就是判断斜率是否为 +1 or -1 (45°)
@@ -90,8 +93,13 @@ public class NQueens {
             // 也就是 col - cols[i] / +- (row - i) <=> row - i = -+(col - cols[i])
             // 为什么要换呢？因为 row - i 不会出现负数
             // 也就是 row - i = |col - cols[i]|
-            if (row - i == Math.abs(col - cols[i])) return false;
+            if (row - i == Math.abs(col - cols[i])) {
+                System.out.println("(" + row + ", " + col + ") = false");
+                return false;
+            }
         }
+
+        System.out.println("(" + row + ", " + col + ") = true");
 
         // 说明行和斜线都没有皇后，不需要剪枝
 
