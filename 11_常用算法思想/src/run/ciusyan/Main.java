@@ -1,11 +1,25 @@
 package run.ciusyan;
 
+import run.ciusyan.recursion.ClimbStairs;
 import run.ciusyan.recursion.Fib;
 import run.ciusyan.tools.Times;
 
 public class Main {
     public static void main(String[] args) {
-        testFib();
+        testClimbStairs();
+    }
+
+    static void testClimbStairs() {
+        int n = 44;
+        ClimbStairs climbStairs = new ClimbStairs();
+
+        Times.test("climbStairs1", () -> {
+            System.out.println(climbStairs.climbStairs1(n));
+        });
+
+        Times.test("fib5", () -> {
+            System.out.println(climbStairs.climbStairs2(n));
+        });
     }
 
     static void testFib() {
