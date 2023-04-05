@@ -3,6 +3,7 @@ package run.ciusyan;
 import run.ciusyan.baktraking.NQueens;
 import run.ciusyan.baktraking.NQueens2;
 import run.ciusyan.baktraking.Queens3;
+import run.ciusyan.greedy.Pirate;
 import run.ciusyan.recursion.ClimbStairs;
 import run.ciusyan.recursion.Fib;
 import run.ciusyan.recursion.Hanoi;
@@ -12,7 +13,12 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        testNQueens();
+        testPirate();
+    }
+
+    static void testPirate() {
+        Pirate pirate = new Pirate();
+        pirate.pirate();
     }
 
     static void testNQueens() {

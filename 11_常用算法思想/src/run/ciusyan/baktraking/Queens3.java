@@ -21,7 +21,8 @@ public class Queens3 {
     private int[] queens;
 
     /**
-     * 记录某一列，是否已经有皇后了
+     * 记录某一列，是否已经有皇后了 0110 1100
+     *  代表 . Q Q . Q Q . .
      */
     private byte cols;
 

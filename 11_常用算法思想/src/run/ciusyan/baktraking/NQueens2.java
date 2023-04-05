@@ -26,12 +26,12 @@ public class NQueens2 {
     private boolean[] cols;
 
     /**
-     * 记录某一对角线是否有皇后了（从左上角 -> 右下角） row + col
+     * 记录某一对角线是否有皇后了（从左上角 -> 右下角） row - col + n - 1
      */
     private boolean[] leftTop;
 
     /**
-     * 记录某一对角线是否有皇后了（从右上角 -> 左下角） row - col + n - 1
+     * 记录某一对角线是否有皇后了（从右上角 -> 左下角） row + col
      */
     private boolean[] rightTop;
 
