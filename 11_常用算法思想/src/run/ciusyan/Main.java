@@ -3,6 +3,7 @@ package run.ciusyan;
 import run.ciusyan.baktraking.NQueens;
 import run.ciusyan.baktraking.NQueens2;
 import run.ciusyan.baktraking.Queens3;
+import run.ciusyan.greedy.CoinChange;
 import run.ciusyan.greedy.Pirate;
 import run.ciusyan.recursion.ClimbStairs;
 import run.ciusyan.recursion.Fib;
@@ -13,7 +14,12 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        testPirate();
+        testCoins();
+    }
+
+    static void testCoins() {
+        CoinChange coinChange = new CoinChange();
+        coinChange.coinChange(new Integer[]{25, 5, 20, 1});
     }
 
     static void testPirate() {
