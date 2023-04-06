@@ -5,6 +5,8 @@ import run.ciusyan.baktraking.NQueens2;
 import run.ciusyan.baktraking.Queens3;
 import run.ciusyan.divideconquer.MaxSubarray;
 import run.ciusyan.dp.Coins;
+import run.ciusyan.dp.LIS;
+import run.ciusyan.dp.MaxSubArray;
 import run.ciusyan.greedy.Article;
 import run.ciusyan.greedy.CoinChange;
 import run.ciusyan.greedy.Pirate;
@@ -17,7 +19,18 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        testDpCoins();
+        testDpLIS();
+    }
+
+    static void testDpLIS() {
+        LIS lis = new LIS();
+        System.out.println(lis.lengthOfLIS(new int[]{10, 2, 2, 5, 1, 7, 101, 18}));
+    }
+
+    static void testDpSubArray() {
+        int[] nums = {-1, 1, -3, 4, -1, 2, 1, -5, 4};
+        MaxSubArray subArray = new MaxSubArray();
+        System.out.println(subArray.maxSubArray(nums));
     }
 
     static void testDpCoins() {
