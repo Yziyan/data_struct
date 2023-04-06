@@ -4,6 +4,7 @@ import run.ciusyan.baktraking.NQueens;
 import run.ciusyan.baktraking.NQueens2;
 import run.ciusyan.baktraking.Queens3;
 import run.ciusyan.divideconquer.MaxSubarray;
+import run.ciusyan.dp.Coins;
 import run.ciusyan.greedy.Article;
 import run.ciusyan.greedy.CoinChange;
 import run.ciusyan.greedy.Pirate;
@@ -16,7 +17,14 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        testMaxSubarray();
+        testDpCoins();
+    }
+
+    static void testDpCoins() {
+        Coins coins = new Coins();
+        int[] faces = {1};
+        System.out.println(coins.coinsChange(0, faces));
+        System.out.println(coins.coinsChange(19, faces));
     }
 
     static void testMaxSubarray() {
