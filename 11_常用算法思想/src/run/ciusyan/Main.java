@@ -3,6 +3,8 @@ package run.ciusyan;
 import run.ciusyan.baktraking.NQueens;
 import run.ciusyan.baktraking.NQueens2;
 import run.ciusyan.baktraking.Queens3;
+import run.ciusyan.divideconquer.MaxSubarray;
+import run.ciusyan.greedy.Article;
 import run.ciusyan.greedy.CoinChange;
 import run.ciusyan.greedy.Pirate;
 import run.ciusyan.recursion.ClimbStairs;
@@ -14,7 +16,21 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        testCoins();
+        testMaxSubarray();
+    }
+
+    static void testMaxSubarray() {
+        int[] nums = {-1, 1, -3, 4, -1, 2, 1, -5, 4};
+        MaxSubarray subarray = new MaxSubarray();
+        System.out.println(subarray.maxSubArray(nums));
+    }
+
+    static void testKnapsack() {
+        Article article = new Article();
+        article.backKnapsack("价值主导", ((o1, o2) -> o2.getValue() - o1.getValue()));
+        article.backKnapsack("重量主导", ((o1, o2) -> o1.getWeight() - o2.getWeight()));
+        article.backKnapsack("性价比主导", ((o1, o2) ->
+            Double.compare(o2.getValueDensity(), o1.getValueDensity())));
     }
 
     static void testCoins() {
