@@ -5,6 +5,7 @@ import run.ciusyan.baktraking.NQueens2;
 import run.ciusyan.baktraking.Queens3;
 import run.ciusyan.divideconquer.MaxSubarray;
 import run.ciusyan.dp.Coins;
+import run.ciusyan.dp.LCS;
 import run.ciusyan.dp.LIS;
 import run.ciusyan.dp.MaxSubArray;
 import run.ciusyan.greedy.Article;
@@ -19,7 +20,18 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        testDpLIS();
+        testDpLCS();
+    }
+
+    static void testDpLCS() {
+        LCS lcs = new LCS();
+
+        int[] nums1 = {1, 3, 5, 9, 10};
+        int[] nums2 = {1, 4, 9, 10};
+        int[] nums3 = {1, 3, 9, 10};
+
+        System.out.println(lcs.lcs(nums1, nums2));
+        System.out.println(lcs.lcs(nums1, nums3));
     }
 
     static void testDpLIS() {
