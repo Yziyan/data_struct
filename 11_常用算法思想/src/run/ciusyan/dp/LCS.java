@@ -66,7 +66,7 @@ public class LCS {
         // 只要一维的即可
         int[] dp = new int[colNums.length + 1];
 
-        // 来到这里，肯定是只有更少的列了
+        // 来到这里，肯定是只有更少地列了
         for (int i = 1; i <= rowNums.length; i++) {
             int cur = 0;
             for (int j = 1; j <= colNums.length; j++) {

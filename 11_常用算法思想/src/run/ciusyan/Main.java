@@ -4,10 +4,7 @@ import run.ciusyan.baktraking.NQueens;
 import run.ciusyan.baktraking.NQueens2;
 import run.ciusyan.baktraking.Queens3;
 import run.ciusyan.divideconquer.MaxSubarray;
-import run.ciusyan.dp.Coins;
-import run.ciusyan.dp.LCS;
-import run.ciusyan.dp.LIS;
-import run.ciusyan.dp.MaxSubArray;
+import run.ciusyan.dp.*;
 import run.ciusyan.greedy.Article;
 import run.ciusyan.greedy.CoinChange;
 import run.ciusyan.greedy.Pirate;
@@ -20,8 +17,19 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        testDpLCS();
+        testDpLCSubstring();
     }
+
+    static void testDpLCSubstring() {
+        LCSubstring substring = new LCSubstring();
+        String str1 = "ABCDA";
+        String str2 = "BCDA";
+        String str3 = "SADCA";
+
+        System.out.println(substring.lcs(str1, str2));
+        System.out.println(substring.lcs(str1, str3));
+    }
+
 
     static void testDpLCS() {
         LCS lcs = new LCS();
