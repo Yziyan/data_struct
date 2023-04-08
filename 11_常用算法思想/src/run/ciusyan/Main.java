@@ -17,7 +17,17 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        testDpLCSubstring();
+        testDpKnapsack();
+    }
+
+    static void testDpKnapsack() {
+        Knapsack knapsack = new Knapsack();
+        int[] values =  {6, 3, 5, 4, 6};
+        int[] weights = {2, 2, 6, 5, 4};
+        int capacity = 10;
+
+        System.out.println(knapsack.select(values, weights, capacity));
+        System.out.println(knapsack.selectExactly(values, weights, capacity));
     }
 
     static void testDpLCSubstring() {
