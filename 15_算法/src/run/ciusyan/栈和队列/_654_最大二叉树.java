@@ -70,7 +70,6 @@ public class _654_最大二叉树 {
             stack.push(i);
         }
 
-
         System.out.println("left: " + Arrays.toString(lefts));
         System.out.println("right: " + Arrays.toString(rights));
 
