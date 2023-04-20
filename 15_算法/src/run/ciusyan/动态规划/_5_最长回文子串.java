@@ -6,7 +6,92 @@ package run.ciusyan.动态规划;
  */
 public class _5_最长回文子串 {
 
+    /**
+     * Manacher 马拉车算法
+     */
     public static String longestPalindrome(String s) {
+        if (s == null) return null;
+        char[] chars = s.toCharArray();
+        if (chars.length <= 1) return s;
+
+        // 获取预处理后的数组
+        char[] newChars = preProcess(chars);
+        int[] m = new int[newChars.length];
+
+        // 用于记录 m 中的最大长度，默认为 0 （#字符时）
+        int maxLen = 0;
+        // 记录最长回文子串，在 newChars 中的起始索引，
+        //      用于之后计算 在旧数组中的起始位置
+        int index = 0;
+
+        // 用于记录中心位置
+        int c = 1;
+        // 用于记录每次能够到达右边的最远参考距离
+        int r = 1;
+        // 只需要从第 [3, 倒数第三个] 即可
+        for (int i = 2; i < newChars.length - 3; i++) {
+
+            // 如果 r > i 说明之后的可有值得参考的距离，给 m[i]一些初始值
+            if (r > i) {
+                // li 和 r 关于 c 对称
+                int li = (c << 1) - r;
+
+                m[i] = (i + m[li] <= r) ? m[li] : r - i;
+            }
+
+            // 到下面了，直接以 i 为中心，往两边拓展
+            // 以 i 为中心，i + m[i] 个字符都已经是对称的，所以可以直接往 + 1个开始比较
+            // i - m[i] 个字符也是对称的，所以直接可以往 - 1个开始比较
+            while (newChars[i + m[i] + 1] == newChars[i - m[i] - 1]) {
+                // 说明还能够往两边延伸
+                m[i]++;
+            }
+
+            // 来到这里，需要检查挪动后，是否有更远、更合适的对称中心
+            if (i + m[i] > r) {
+                c = i;
+                r = i + m[i];
+            }
+
+            // 查看是否有更长的回文子串产生
+            if (m[i] > maxLen) {
+                maxLen = m[i];
+                index = i;
+            }
+        }
+
+        // 计算将 m数组 中的最长子串的位置，映射到旧数组上
+        int begin = (index - maxLen) >> 1;
+
+        return new String(chars, begin, maxLen);
+    }
+
+    /**
+     * 对字符串进行预处理
+     * 以 ^ 开头 $ 结尾
+     * 以 # 隔开
+     */
+    private static char[] preProcess(char[] chars) {
+        // 长度是固定的，2倍的原串 + 头# 尾
+        char[] newChars = new char[(chars.length << 1) + 3];
+        newChars[0] = '^';
+        newChars[1] = '#';
+        newChars[newChars.length - 1] = '$';
+
+        // 遍历原字符，将每一个添加到新串中
+        for (int i = 0; i < chars.length; i++) {
+            int index = (i + 1) << 1;
+            newChars[index] = chars[i];
+            newChars[index + 1] = '#';
+        }
+
+        return newChars;
+    }
+
+    /**
+     * 扩展中心法 2
+     */
+    public static String longestPalindrome5(String s) {
         if (s == null) return null;
         char[] chars = s.toCharArray();
         if (chars.length <= 1) return s;
@@ -46,6 +131,7 @@ public class _5_最长回文子串 {
 
         return new String(chars, begin, maxLen);
     }
+
     /**
      * 扩展中心法 1
      */
@@ -233,7 +319,8 @@ public class _5_最长回文子串 {
     }
 
     public static void main(String[] args) {
-        System.out.println(longestPalindrome("cbbd"));
-        System.out.println(longestPalindrome("babad"));
+//        System.out.println(longestPalindrome("cbbd"));
+//        System.out.println(longestPalindrome("babad"));
+        System.out.println(preProcess("babad".toCharArray()));
     }
 }
