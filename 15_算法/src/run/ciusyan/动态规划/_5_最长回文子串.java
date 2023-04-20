@@ -6,10 +6,50 @@ package run.ciusyan.动态规划;
  */
 public class _5_最长回文子串 {
 
+    public static String longestPalindrome(String s) {
+        if (s == null) return null;
+        char[] chars = s.toCharArray();
+        if (chars.length <= 1) return s;
+
+        // 默认起始位置
+        int begin = 0;
+        // 默认最长回文子串的长度
+        int maxLen = 1;
+
+        int i = 0;
+        while (i < chars.length) {
+            // 先计算出扩展中心左边的位置
+            int l = i - 1;
+            // 扩展中心右边
+            int r = i;
+
+            // 循环，找出第一个不等于 现在扩展中心的字符的位置
+            while (++r < chars.length && chars[i] == chars[r]);
+
+            // 之后的扩展中心，是 r
+            i = r;
+
+            // 这里需要循环比较，但需要保证不越界
+            while (l >= 0 && r <chars.length && chars[l] == chars[r]) {
+                l--;
+                r++;
+            }
+
+            // 来到这里，此次能够找到的回文子串已经出来了
+            int len = r - l - 1;
+            if (len > maxLen) {
+                maxLen = len;
+                // 起始位置就是现在的 l + 1
+                begin = l + 1;
+            }
+        }
+
+        return new String(chars, begin, maxLen);
+    }
     /**
      * 扩展中心法 1
      */
-    public static String longestPalindrome(String s) {
+    public static String longestPalindrome4(String s) {
         if (s == null) return null;
         char[] chars = s.toCharArray();
         if (chars.length <= 1) return s;
