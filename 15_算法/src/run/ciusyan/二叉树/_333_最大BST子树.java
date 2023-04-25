@@ -120,5 +120,34 @@ class Test {
         root4.right.right = new TreeNode(25);
         int maxBSTSize4 = solution.getMaxBSTSize(root4);
         System.out.println("Max BST size: " + maxBSTSize4); // Expected output: 3
+
+        // Test case 5: The given binary tree is a BST with multiple nodes
+        TreeNode root5 = new TreeNode(20);
+        root5.left = new TreeNode(15);
+        root5.right = new TreeNode(25);
+        root5.left.left = new TreeNode(10);
+        root5.left.right = new TreeNode(18);
+        root5.right.left = new TreeNode(22);
+        root5.right.right = new TreeNode(30);
+        root5.left.left.left = new TreeNode(8);
+        root5.left.left.right = new TreeNode(12);
+        root5.left.right.left = new TreeNode(16);
+        root5.left.right.right = new TreeNode(19);
+        root5.right.left.left = new TreeNode(21);
+        root5.right.left.right = new TreeNode(24);
+        root5.right.right.left = new TreeNode(28);
+        root5.right.right.right = new TreeNode(35);
+        int maxBSTSize5 = solution.getMaxBSTSize(root5);
+        System.out.println("Max BST size: " + maxBSTSize5); // Expected output: 15
+
+        /*
+        打印结果：
+            Max BST size: 0
+            Max BST size: 1
+            Max BST size: 7
+            Max BST size: 3
+            Max BST size: 15
+         */
+
     }
 }
