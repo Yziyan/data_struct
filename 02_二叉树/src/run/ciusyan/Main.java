@@ -4,12 +4,13 @@ import run.ciusyan.avltree.AVLTree;
 import run.ciusyan.binarysearchtree.BinarySearchTree;
 import run.ciusyan.binarysearchtree.impl.BSTImpl;
 import run.ciusyan.binarytree.impl.BinaryTreeImpl;
+import run.ciusyan.binarysearchtree.impl.MorrisTree;
 import run.ciusyan.entity.Person;
 import run.ciusyan.printer.BinaryTrees;
 import run.ciusyan.redblacktree.RBTree;
 
 import java.util.Comparator;
-import java.util.Map;
+import java.util.Random;
 
 public class Main {
 
@@ -182,8 +183,25 @@ public class Main {
 
     }
 
+    static void test8() {
+        MorrisTree morrisTree = new MorrisTree();
+
+        for (int i = 0; i < 10; i++) {
+            morrisTree.add(new Random().nextInt(100));
+        }
+
+        BinaryTrees.println(morrisTree);
+        System.out.println("---------");
+
+        morrisTree.inorder();
+
+        System.out.println("---------");
+        BinaryTrees.println(morrisTree);
+
+    }
+
     public static void main(String[] args) {
-        test7();
+        test8();
     }
 
 }
