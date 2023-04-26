@@ -8,11 +8,69 @@ import java.util.List;
  */
 public class _46_全排列 {
 
+    /**
+     * 交换剪枝
+     */
+    public List<List<Integer>> permute(int[] nums) {
+        if (nums == null) return null;
+
+        // 结果数组
+        List<List<Integer>> list = new ArrayList<>();
+        if (nums.length == 0) return list;
+
+        // dfs从第 0 层开始，往下钻
+        dfs(0, nums, list);
+
+        return list;
+    }
+
+    /**
+     *
+     * @param level：第几层
+     * @param nums：元数据 + 轨迹 + 标识使用
+     * @param list：结果列表
+     */
+    private void dfs(int level, int[] nums, List<List<Integer>> list) {
+        if (level == nums.length) {
+            // 说明不能往下钻了，利用轨迹，记录一个组合
+            List<Integer> result = new ArrayList<>();
+            for (int num : nums) {
+                result.add(num);
+            }
+
+            list.add(result);
+
+            // 直接回溯到上一层
+            return;
+        }
+
+        // 来到这里，说明这一层还合理，枚举所有可能
+        //      是第几层，就从第几号位置开始交换，也就是要确定第几层的元素
+        for (int i = level; i < nums.length; i++) {
+            swap(nums, level, i);
+
+            // 拿着这一次交换后，确定的第 level 层元素，往下钻
+            dfs(level + 1, nums, list);
+
+            // 如果来到这里，说明回溯到 level 层了，
+            //      将刚刚交换的位置先复原成最初的样子（上上层的样子）
+            swap(nums, level, i);
+        }
+    }
+
+    /**
+     * 交换 nums 中，i j 位置的元素
+     */
+    private void swap(int[] nums, int i, int j) {
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    }
 
     /**
      * 使用 List 作为轨迹 + 标识已使用
      */
-    public List<List<Integer>> permute(int[] nums) {
+    public List<List<Integer>> permute2(int[] nums) {
         if (nums == null) return null;
 
         // 结果数组
@@ -23,12 +81,12 @@ public class _46_全排列 {
         List<Integer> track = new ArrayList<>();
 
         // dfs 搜索，从 0 层开始
-        dfs(0, nums, track, list);
+        dfs2(0, nums, track, list);
 
         return list;
     }
 
-    private void dfs(int level, int[] nums, List<Integer> track, List<List<Integer>> list) {
+    private void dfs2(int level, int[] nums, List<Integer> track, List<List<Integer>> list) {
         // 不能往下搜索了
         if (level == nums.length) {
             // 利用轨迹，记录一个合理的结果
@@ -47,7 +105,7 @@ public class _46_全排列 {
             // 来到这里，说明此数字在这一次组合中，还没被选择，记录轨迹
             track.add(nums[i]);
             // 往下一层搜索
-            dfs(level + 1, nums, track, list);
+            dfs2(level + 1, nums, track, list);
             // 回溯到上一层时，需要还原现场，因为这个值已经用过了
             track.remove(track.size() - 1);
         }
