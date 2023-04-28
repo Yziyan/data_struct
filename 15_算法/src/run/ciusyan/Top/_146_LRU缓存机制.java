@@ -9,7 +9,7 @@ import run.ciusyan.Asserts;
 public class _146_LRU缓存机制 {
 
     public static void main(String[] args) {
-        LRUCache cache = new LRUCache( 2 /* 缓存容量 */ );
+        LRUCache1 cache = new LRUCache1( 2 /* 缓存容量 */ );
         cache.put(1, 1);
         cache.put(2, 2);
         Asserts.test(cache.get(1) == 1); // 返回  1
