@@ -8,6 +8,37 @@ public class 会议室2 {
     public static int minMeetingRooms(int[][] intervals) {
         if (intervals == null || intervals.length == 0) return 0;
 
+        // 会议的开始时间
+        int[] begins = new int[intervals.length];
+        // 会议的结束时间
+        int[] ends = new int[intervals.length];
+        for (int i = 0; i < intervals.length; i++) {
+            begins[i] = intervals[i][0];
+            ends[i] = intervals[i][1];
+        }
+
+        // 对它们进行排序
+        Arrays.sort(begins);
+        Arrays.sort(ends);
+
+        // 需要多少间会议室，结束时间的索引
+        int rooms = 0, endIndex = 0;
+        for (int begin : begins) {
+            if (begin >= ends[endIndex]) {
+                // 说明可以重复利用会议室
+                endIndex++;
+            } else {
+                // 需要新开一间会议室
+                rooms++;
+            }
+        }
+
+        return rooms;
+    }
+
+    public static int minMeetingRooms1(int[][] intervals) {
+        if (intervals == null || intervals.length == 0) return 0;
+
         // 按照会议的开始时间排序
         Arrays.sort(intervals, ((o1, o2) -> o1[0] - o2[0]));
 
